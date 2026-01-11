@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนที่พิกัดสแกมเมอร์ลาว</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Prompt', sans-serif; }
+        
+        #map { height: 100vh; width: 100%; }
+        
+        /* Header Stats */
+        .header-stats {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 0 15px;
+        }
+        .stat-box:not(:last-child) {
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-number.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .stat-number.red {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 3px;
+        }
+        
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            min-width: 200px;
+        }
+        .legend h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #555;
+        }
+        .legend-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: 600;
+        }
+        .legend-icon.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .legend-icon.yellow { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
+        .legend-icon.red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
+        .legend-icon.gray { background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%); }
+        
+        /* Signal Legend */
+        .signal-legend {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        .signal-legend h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .signal-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        .signal-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .signal-badge.ok { background: #d4edda; color: #155724; }
+        .signal-badge.no { background: #f8d7da; color: #721c24; }
+        
+        /* Refresh Button */
+        .refresh-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        /* Edit Sheet Button */
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        /* Info Window */
+        .gm-style-iw-c {
+            padding: 0 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+        }
+        .gm-style-iw-d {
+            overflow: hidden !important;
+        }
+        .info-window {
+            min-width: 280px;
+            font-family: 'Prompt', sans-serif;
+        }
+        .info-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px 20px;
+            color: white;
+        }
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .info-subtitle {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .info-body {
+            padding: 15px 20px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #888; }
+        .info-value { font-weight: 500; color: #333; }
+        
+        .signal-grid {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .signal-card {
+            flex: 1;
+            text-align: center;
+            padding: 12px 8px;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+        .signal-card.ok { background: #d4edda; }
+        .signal-card.no { background: #f8d7da; }
+        .signal-provider {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .signal-status {
+            font-size: 18px;
+        }
+        
+        .btn-maps {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-maps:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Loading */
+        .loading {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .loading.hidden { display: none; }
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* Setup Panel */
+        .setup-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .setup-overlay.hidden { display: none; }
+        .setup-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        .setup-panel h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+        .setup-panel p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .setup-panel input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Prompt', sans-serif;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+        .setup-panel input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .setup-panel button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Prompt', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .setup-panel button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-stats {
+                padding: 12px 15px;
+                gap: 15px;
+                width: 90%;
+            }
+            .stat-number { font-size: 24px; }
+            .stat-box { padding: 0 10px; }
+            .legend, .signal-legend { 
+                bottom: auto;
+                top: 80px;
+                width: calc(50% - 25px);
+                padding: 15px;
+            }
+            .legend { left: 10px; }
+            .signal-legend { right: 10px; }
+            .edit-btn, .refresh-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">กำลังโหลดข้อมูล...</div>
+    </div>
+    
+    <div id="setupOverlay" class="setup-overlay hidden">
+        <div class="setup-panel">
+            <h2>⚙️ ตั้งค่า Google Sheet</h2>
+            <p>กรุณาใส่ Sheet ID จาก URL ของ Google Sheet<br>
+            <small style="color:#999;">https://docs.google.com/spreadsheets/d/<b>SHEET_ID</b>/edit</small></p>
+            <input type="text" id="sheetIdInput" placeholder="วาง Sheet ID ที่นี่">
+            <button onclick="saveSheetId()">เริ่มใช้งาน</button>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+    
+    <div class="header-stats">
+        <div class="stat-box">
+            <div class="stat-number" id="totalCount">0</div>
+            <div class="stat-label">พิกัดทั้งหมด</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number green" id="surveyedCount">0</div>
+            <div class="stat-label">สำรวจแล้ว</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number red" id="pendingCount">0</div>
+            <div class="stat-label">รอสำรวจ</div>
+        </div>
+    </div>
+    
+    <a id="editBtn" href="#" target="_blank" class="edit-btn">
+        📝 แก้ไข Google Sheet
+    </a>
+    
+    <button class="refresh-btn" onclick="loadData()">
+        🔄 รีเฟรชข้อมูล
+    </button>
+    
+    <div class="legend">
+        <h4>🗺️ สถานะการสำรวจ</h4>
+        <div class="legend-item">
+            <div class="legend-icon green">✓</div>
+            <span>สำรวจแล้ว - AIS ใช้ได้</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-icon red">✗</div>
+            <span>สำรวจแล้ว - ใช้ไม่ได้ทุกค่าย</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-icon gray">?</div>
+            <span>ยังไม่สำรวจ</span>
+        </div>
+    </div>
+    
+    <div class="signal-legend">
+        <h4>📶 สัญลักษณ์สัญญาณ</h4>
+        <div class="signal-row">
+            <span style="color:#00a651; font-weight:600;">AIS</span>
+            <span class="signal-badge ok">✓ ใช้งานได้</span>
+            <span class="signal-badge no">✗ ใช้ไม่ได้</span>
+        </div>
+        <div class="signal-row">
+            <span style="color:#00b2e3; font-weight:600;">DTAC</span>
+            <span class="signal-badge ok">✓ ใช้งานได้</span>
+            <span class="signal-badge no">✗ ใช้ไม่ได้</span>
+        </div>
+        <div class="signal-row">
+            <span style="color:#eb2227; font-weight:600;">TRUE</span>
+            <span class="signal-badge ok">✓ ใช้งานได้</span>
+            <span class="signal-badge no">✗ ใช้ไม่ได้</span>
+        </div>
+    </div>
+
+    <script>
+        let SHEET_ID = localStorage.getItem('sheet_id') || '';
+        let map, markers = [], infoWindow;
+        let locationsData = [];
+        
+        // Initialize map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 17.5, lng: 104.5 },
+                zoom: 6,
+                styles: [
+                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                    { featureType: "transit", stylers: [{ visibility: "off" }] }
+                ],
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.TOP_CENTER
+                },
+                fullscreenControl: true,
+                streetViewControl: false
+            });
+            
+            infoWindow = new google.maps.InfoWindow();
+            
+            if (!SHEET_ID) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('setupOverlay').classList.remove('hidden');
+            } else {
+                document.getElementById('editBtn').href = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+                loadData();
+            }
+        }
+        
+        // Save Sheet ID
+        function saveSheetId() {
+            const id = document.getElementById('sheetIdInput').value.trim();
+            if (!id) {
+                alert('กรุณาใส่ Sheet ID');
+                return;
+            }
+            localStorage.setItem('sheet_id', id);
+            SHEET_ID = id;
+            document.getElementById('setupOverlay').classList.add('hidden');
+            document.getElementById('editBtn').href = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+            loadData();
+        }
+        
+        // Get marker icon
+        function getMarkerIcon(loc) {
+            const status = loc['สถานะสำรวจ'];
+            const ais = loc['AIS'];
+            
+            let color, label;
+            
+            if (status === 'สำรวจแล้ว') {
+                if (ais === 'ใช้งานได้') {
+                    color = '#11998e'; // Green
+                    label = '✓';
+                } else {
+                    color = '#eb3349'; // Red
+                    label = '✗';
+                }
+            } else {
+                color = '#95a5a6'; // Gray
+                label = '?';
+            }
+            
+            return {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: color,
+                fillOpacity: 1,
+                strokeColor: '#ffffff',
+                strokeWeight: 3,
+                scale: 12
+            };
+        }
+        
+        // Create info window content
+        function createInfoContent(loc) {
+            const getSignalClass = (val) => val === 'ใช้งานได้' ? 'ok' : (val === 'ใช้งานไม่ได้' ? 'no' : '');
+            const getSignalIcon = (val) => val === 'ใช้งานได้' ? '✓' : (val === 'ใช้งานไม่ได้' ? '✗' : '-');
+            
+            return `
+                <div class="info-window">
+                    <div class="info-header">
+                        <div class="info-title">${loc['ชื่อโลเคชั่น'] || 'ไม่ระบุ'}</div>
+                        <div class="info-subtitle">#${loc['ลำดับ']} • ${loc['จังหวัดใกล้เคียง'] || '-'}</div>
+                    </div>
+                    <div class="info-body">
+                        <div class="info-row">
+                            <span class="info-label">สถานะ</span>
+                            <span class="info-value">${loc['สถานะสำรวจ'] || 'ยังไม่สำรวจ'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">พื้นที่</span>
+                            <span class="info-value">${loc['พื้นที่ ชป.'] || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">ความถี่</span>
+                            <span class="info-value">${loc['ความถี่'] || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">วันที่สำรวจ</span>
+                            <span class="info-value">${loc['วันที่สำรวจ'] || '-'}</span>
+                        </div>
+                        
+                        <div class="signal-grid">
+                            <div class="signal-card ${getSignalClass(loc['AIS'])}">
+                                <div class="signal-provider" style="color:#00a651;">AIS</div>
+                                <div class="signal-status">${getSignalIcon(loc['AIS'])}</div>
+                            </div>
+                            <div class="signal-card ${getSignalClass(loc['DTAC'])}">
+                                <div class="signal-provider" style="color:#00b2e3;">DTAC</div>
+                                <div class="signal-status">${getSignalIcon(loc['DTAC'])}</div>
+                            </div>
+                            <div class="signal-card ${getSignalClass(loc['TRUE'])}">
+                                <div class="signal-provider" style="color:#eb2227;">TRUE</div>
+                                <div class="signal-status">${getSignalIcon(loc['TRUE'])}</div>
+                            </div>
+                        </div>
+                        
+                        ${loc['หมายเหตุ'] ? `<p style="margin-top:15px;padding:10px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666;">${loc['หมายเหตุ']}</p>` : ''}
+                        
+                        ${loc['ลิงก์ Google Maps'] ? `<a href="${loc['ลิงก์ Google Maps']}" target="_blank" class="btn-maps">📍 เปิดใน Google Maps</a>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Update stats
+        function updateStats() {
+            const total = locationsData.length;
+            const surveyed = locationsData.filter(l => l['สถานะสำรวจ'] === 'สำรวจแล้ว').length;
+            const pending = total - surveyed;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('surveyedCount').textContent = surveyed;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+        
+        // Clear markers
+        function clearMarkers() {
+            markers.forEach(m => m.setMap(null));
+            markers = [];
+        }
+        
+        // Load data from Google Sheets
+        async function loadData() {
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const json = JSON.parse(text.substring(47, text.length - 2));
+                
+                const cols = json.table.cols.map(c => c.label);
+                locationsData = json.table.rows.map(row => {
+                    const obj = {};
+                    cols.forEach((col, i) => {
+                        obj[col] = row.c[i] ? row.c[i].v : '';
+                    });
+                    return obj;
+                });
+                
+                // Clear existing markers
+                clearMarkers();
+                
+                // Create markers
+                const bounds = new google.maps.LatLngBounds();
+                
+                locationsData.forEach(loc => {
+                    const lat = parseFloat(loc['ละติจูด']);
+                    const lng = parseFloat(loc['ลองจิจูด']);
+                    
+                    if (!lat || !lng) return;
+                    
+                    const position = { lat, lng };
+                    bounds.extend(position);
+                    
+                    const marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        icon: getMarkerIcon(loc),
+                        title: loc['ชื่อโลเคชั่น']
+                    });
+                    
+                    marker.addListener('click', () => {
+                        infoWindow.setContent(createInfoContent(loc));
+                        infoWindow.open(map, marker);
+                    });
+                    
+                    markers.push(marker);
+                });
+                
+                // Fit map to markers
+                if (markers.length > 0) {
+                    map.fitBounds(bounds);
+                }
+                
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('ไม่สามารถโหลดข้อมูลได้\nกรุณาตรวจสอบ Sheet ID และการ Share');
+            }
+            
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        // Init
+        window.initMap = initMap;
+    </script>
+    
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtMkrEmWVIp6IW6vkZ9A-7vjQKc8njTOA&callback=initMap"></script>
+</body>
+</html>
