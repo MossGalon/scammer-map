@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนที่พิกัดสแกมเมอร์ลาว - Survey Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        #map { height: 100vh; width: 100%; }
+        
+        /* Header Stats Bar */
+        .stats-bar {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 0 15px;
+            border-right: 1px solid #e0e0e0;
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #1a73e8; }
+        .stat-label { font-size: 11px; color: #666; margin-top: 2px; }
+        .stat-item.surveyed .stat-number { color: #34a853; }
+        .stat-item.pending .stat-number { color: #ea4335; }
+        
+        /* Legend */
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 13px;
+        }
+        .legend h4 { margin-bottom: 10px; color: #333; }
+        .legend-item { display: flex; align-items: center; margin: 6px 0; }
+        .legend-color {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        /* Popup Styles */
+        .custom-popup { min-width: 320px; }
+        .popup-header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 12px 15px;
+            margin: -13px -20px 15px -20px;
+            border-radius: 10px 10px 0 0;
+        }
+        .popup-header h3 { font-size: 16px; margin-bottom: 4px; }
+        .popup-header .location-id { 
+            font-size: 12px; 
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .popup-header .frequency {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .popup-section {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .popup-section:last-child { border-bottom: none; margin-bottom: 0; }
+        .popup-section h4 {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-surveyed { background: #e6f4ea; color: #1e8e3e; }
+        .status-pending { background: #fce8e6; color: #d93025; }
+        .status-progress { background: #fef7e0; color: #f9ab00; }
+        
+        .signal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .signal-item {
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .signal-item.good { background: #e6f4ea; }
+        .signal-item.weak { background: #fef7e0; }
+        .signal-item.none { background: #fce8e6; }
+        .signal-provider { font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+        .signal-status { font-size: 11px; color: #666; }
+        .signal-dbm { font-size: 10px; color: #999; }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+        .info-label { color: #666; }
+        .info-value { font-weight: 500; color: #333; }
+        
+        .media-section { margin-top: 10px; }
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .media-thumb {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .media-thumb:hover { transform: scale(1.05); }
+        .video-thumb {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #333;
+            border-radius: 8px;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+        .video-thumb i { color: white; font-size: 24px; }
+        
+        .btn-maps {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #1a73e8;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 12px;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-maps:hover { background: #1557b0; color: white; }
+        
+        .notes-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #333;
+            border-left: 3px solid #1a73e8;
+        }
+        
+        /* Filter Panel */
+        .filter-panel {
+            position: absolute;
+            top: 80px;
+            right: 10px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+        .filter-panel h4 { margin-bottom: 12px; color: #333; font-size: 14px; }
+        .filter-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .filter-item input { margin-right: 8px; }
+        .filter-item label { font-size: 13px; cursor: pointer; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-bar {
+                top: auto;
+                bottom: 80px;
+                left: 10px;
+                right: 10px;
+                transform: none;
+                padding: 10px 15px;
+            }
+            .stat-item { padding: 0 10px; }
+            .stat-number { font-size: 18px; }
+            .legend { bottom: 150px; }
+            .filter-panel { top: 10px; right: 10px; }
+            .custom-popup { min-width: 280px; }
+        }
+
+        /* Loading */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            background: white;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .loading i { font-size: 40px; color: #1a73e8; margin-bottom: 15px; }
+        .loading p { color: #666; }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>กำลังโหลดข้อมูล...</p>
+    </div>
+    
+    <div id="map"></div>
+    
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-item">
+            <div class="stat-number" id="totalLocations">0</div>
+            <div class="stat-label">พิกัดทั้งหมด</div>
+        </div>
+        <div class="stat-item surveyed">
+            <div class="stat-number" id="surveyedCount">0</div>
+            <div class="stat-label">สำรวจแล้ว</div>
+        </div>
+        <div class="stat-item pending">
+            <div class="stat-number" id="pendingCount">0</div>
+            <div class="stat-label">รอสำรวจ</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="totalFrequency">0</div>
+            <div class="stat-label">ความถี่รวม</div>
+        </div>
+    </div>
+    
+    <div class="legend">
+        <h4><i class="fas fa-map-marker-alt"></i> สัญลักษณ์</h4>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #34a853;"></div>
+            <span>สำรวจแล้ว</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #f9ab00;"></div>
+            <span>อยู่ระหว่างสำรวจ</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ea4335;"></div>
+            <span>ยังไม่สำรวจ</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #9c27b0;"></div>
+            <span>พื้นที่กว้าง (A1-A6)</span>
+        </div>
+    </div>
+    
+    <div class="filter-panel">
+        <h4><i class="fas fa-filter"></i> กรองข้อมูล</h4>
+        <div class="filter-item">
+            <input type="checkbox" id="filterAll" checked>
+            <label for="filterAll">แสดงทั้งหมด</label>
+        </div>
+        <div class="filter-item">
+            <input type="checkbox" id="filterSurveyed" checked>
+            <label for="filterSurveyed">สำรวจแล้ว</label>
+        </div>
+        <div class="filter-item">
+            <input type="checkbox" id="filterPending" checked>
+            <label for="filterPending">ยังไม่สำรวจ</label>
+        </div>
+        <hr style="margin: 10px 0; border: none; border-top: 1px solid #eee;">
+        <div class="filter-item">
+            <input type="checkbox" id="filterHighFreq">
+            <label for="filterHighFreq">ความถี่สูง (>100)</label>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map centered on Laos
+        const map = L.map('map').setView([17.5, 103.5], 6);
+        
+        // OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+        
+        // Store markers and data
+        let markers = [];
+        let locationsData = [];
+        
+        // Custom marker icons
+        function createMarkerIcon(color, size = 12) {
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    background: ${color};
+                    width: ${size * 2}px;
+                    height: ${size * 2}px;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                "></div>`,
+                iconSize: [size * 2, size * 2],
+                iconAnchor: [size, size]
+            });
+        }
+        
+        // Get marker color based on status
+        function getMarkerColor(location) {
+            if (location.name.startsWith('A')) return '#9c27b0'; // Area locations
+            switch(location.survey_status) {
+                case 'สำรวจแล้ว': return '#34a853';
+                case 'อยู่ระหว่างสำรวจ': return '#f9ab00';
+                default: return '#ea4335';
+            }
+        }
+        
+        // Get signal status class
+        function getSignalClass(status) {
+            if (!status) return '';
+            if (status.includes('ดี') || status.includes('ใช้ได้')) return 'good';
+            if (status.includes('อ่อน')) return 'weak';
+            if (status.includes('ไม่ได้') || status.includes('ไม่มี')) return 'none';
+            return '';
+        }
+        
+        // Convert Google Drive link to preview
+        function getGoogleDrivePreview(url) {
+            if (!url) return null;
+            // Handle various Google Drive URL formats
+            let fileId = null;
+            if (url.includes('drive.google.com/file/d/')) {
+                fileId = url.split('/file/d/')[1].split('/')[0];
+            } else if (url.includes('drive.google.com/open?id=')) {
+                fileId = url.split('open?id=')[1].split('&')[0];
+            } else if (url.includes('id=')) {
+                fileId = url.split('id=')[1].split('&')[0];
+            }
+            if (fileId) {
+                return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+            }
+            return url;
+        }
+        
+        // Create popup content
+        function createPopupContent(loc) {
+            const statusClass = loc.survey_status === 'สำรวจแล้ว' ? 'status-surveyed' : 
+                               loc.survey_status === 'อยู่ระหว่างสำรวจ' ? 'status-progress' : 'status-pending';
+            
+            let imagesHtml = '';
+            if (loc.images && loc.images.length > 0) {
+                imagesHtml = `
+                    <div class="media-section">
+                        <h4><i class="fas fa-images"></i> รูปภาพ</h4>
+                        <div class="media-grid">
+                            ${loc.images.map(img => `
+                                <a href="${img}" target="_blank">
+                                    <img src="${getGoogleDrivePreview(img)}" class="media-thumb" 
+                                         onerror="this.src='https://via.placeholder.com/100?text=Image'">
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let videosHtml = '';
+            if (loc.videos && loc.videos.length > 0) {
+                videosHtml = `
+                    <div class="media-section">
+                        <h4><i class="fas fa-video"></i> วิดีโอ</h4>
+                        <div class="media-grid">
+                            ${loc.videos.map(vid => `
+                                <a href="${vid}" target="_blank" class="video-thumb">
+                                    <i class="fas fa-play-circle"></i>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="custom-popup">
+                    <div class="popup-header">
+                        <h3>${loc.name || 'ไม่ระบุชื่อ'}</h3>
+                        <div class="location-id">
+                            <span>#${loc.id}</span>
+                            ${loc.frequency > 0 ? `<span class="frequency">${loc.frequency.toLocaleString()} ครั้ง</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="popup-section">
+                        <h4><i class="fas fa-clipboard-check"></i> สถานะสำรวจ</h4>
+                        <span class="status-badge ${statusClass}">${loc.survey_status}</span>
+                        ${loc.survey_date ? `<div class="info-row"><span class="info-label">วันที่:</span><span class="info-value">${loc.survey_date}</span></div>` : ''}
+                        ${loc.surveyor ? `<div class="info-row"><span class="info-label">ผู้สำรวจ:</span><span class="info-value">${loc.surveyor}</span></div>` : ''}
+                    </div>
+                    
+                    <div class="popup-section">
+                        <h4><i class="fas fa-info-circle"></i> ข้อมูลพื้นที่</h4>
+                        <div class="info-row">
+                            <span class="info-label">จังหวัดใกล้เคียง:</span>
+                            <span class="info-value">${loc.province || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">พื้นที่ ชป.:</span>
+                            <span class="info-value">${loc.area || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">กำลังพล:</span>
+                            <span class="info-value">${loc.team || '-'}</span>
+                        </div>
+                        ${loc.lac || loc.ci ? `
+                        <div class="info-row">
+                            <span class="info-label">LAC / CI:</span>
+                            <span class="info-value">${loc.lac || '-'} / ${loc.ci || '-'}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="popup-section">
+                        <h4><i class="fas fa-signal"></i> สัญญาณมือถือ</h4>
+                        <div class="signal-grid">
+                            <div class="signal-item ${getSignalClass(loc.ais?.status)}">
+                                <div class="signal-provider" style="color: #00a651;">AIS</div>
+                                <div class="signal-status">${loc.ais?.status || 'ยังไม่ตรวจ'}</div>
+                                ${loc.ais?.dbm ? `<div class="signal-dbm">${loc.ais.dbm} dBm</div>` : ''}
+                            </div>
+                            <div class="signal-item ${getSignalClass(loc.dtac?.status)}">
+                                <div class="signal-provider" style="color: #00b2e3;">DTAC</div>
+                                <div class="signal-status">${loc.dtac?.status || 'ยังไม่ตรวจ'}</div>
+                                ${loc.dtac?.dbm ? `<div class="signal-dbm">${loc.dtac.dbm} dBm</div>` : ''}
+                            </div>
+                            <div class="signal-item ${getSignalClass(loc.true?.status)}">
+                                <div class="signal-provider" style="color: #eb2227;">TRUE</div>
+                                <div class="signal-status">${loc.true?.status || 'ยังไม่ตรวจ'}</div>
+                                ${loc.true?.dbm ? `<div class="signal-dbm">${loc.true.dbm} dBm</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${imagesHtml}
+                    ${videosHtml}
+                    
+                    ${loc.notes ? `
+                    <div class="popup-section">
+                        <h4><i class="fas fa-sticky-note"></i> หมายเหตุ</h4>
+                        <div class="notes-box">${loc.notes}</div>
+                    </div>
+                    ` : ''}
+                    
+                    ${loc.google_maps ? `
+                    <a href="${loc.google_maps}" target="_blank" class="btn-maps">
+                        <i class="fas fa-external-link-alt"></i> เปิด Google Maps
+                    </a>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const total = locationsData.length;
+            const surveyed = locationsData.filter(l => l.survey_status === 'สำรวจแล้ว').length;
+            const pending = locationsData.filter(l => l.survey_status === 'ยังไม่สำรวจ').length;
+            const totalFreq = locationsData.reduce((sum, l) => sum + (l.frequency || 0), 0);
+            
+            document.getElementById('totalLocations').textContent = total;
+            document.getElementById('surveyedCount').textContent = surveyed;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('totalFrequency').textContent = totalFreq.toLocaleString();
+        }
+        
+        // Add markers to map
+        function addMarkers() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            
+            const showSurveyed = document.getElementById('filterSurveyed').checked;
+            const showPending = document.getElementById('filterPending').checked;
+            const highFreqOnly = document.getElementById('filterHighFreq').checked;
+            
+            locationsData.forEach(loc => {
+                // Apply filters
+                if (loc.survey_status === 'สำรวจแล้ว' && !showSurveyed) return;
+                if (loc.survey_status === 'ยังไม่สำรวจ' && !showPending) return;
+                if (highFreqOnly && loc.frequency <= 100) return;
+                
+                const color = getMarkerColor(loc);
+                const size = Math.max(10, Math.min(20, 10 + (loc.frequency / 100)));
+                
+                const marker = L.marker([loc.lat, loc.lng], {
+                    icon: createMarkerIcon(color, size)
+                }).addTo(map);
+                
+                marker.bindPopup(createPopupContent(loc), {
+                    maxWidth: 400,
+                    className: 'custom-popup-wrapper'
+                });
+                
+                markers.push(marker);
+            });
+        }
+        
+        // Load data from JSON
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                locationsData = data.locations;
+                
+                updateStats();
+                addMarkers();
+                
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                
+                // Fit map to markers
+                if (markers.length > 0) {
+                    const group = L.featureGroup(markers);
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color: #ea4335;"></i>
+                    <p>ไม่สามารถโหลดข้อมูลได้<br><small>${error.message}</small></p>
+                `;
+            }
+        }
+        
+        // Filter event listeners
+        document.getElementById('filterAll').addEventListener('change', function() {
+            document.getElementById('filterSurveyed').checked = this.checked;
+            document.getElementById('filterPending').checked = this.checked;
+            addMarkers();
+        });
+        
+        document.getElementById('filterSurveyed').addEventListener('change', addMarkers);
+        document.getElementById('filterPending').addEventListener('change', addMarkers);
+        document.getElementById('filterHighFreq').addEventListener('change', addMarkers);
+        
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,934 @@
+{
+  "locations": [
+    {
+      "id": 1,
+      "name": "A1 - Kings Romans Casino Zone",
+      "lat": 20.339114,
+      "lng": 100.100727,
+      "frequency": 0,
+      "bank": "",
+      "province": "เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/KVwQ7GySg4MfU3hc8",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 2,
+      "name": "A2 - Opposite Paksan , Bolikhamxay, Laos",
+      "lat": 18.402873,
+      "lng": 103.644419,
+      "frequency": 0,
+      "bank": "",
+      "province": "บึงกาฬ",
+      "area": "ชป.3",
+      "team": "ชิต พี่อ้วน",
+      "google_maps": "https://maps.app.goo.gl/hB2k5itBDMk8qx4U7",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 3,
+      "name": "A3 - Kenthao Market, Ban Chomphet,\nSainyabuli Province, Laos",
+      "lat": 17.732279,
+      "lng": 101.390508,
+      "frequency": 0,
+      "bank": "",
+      "province": "เลย",
+      "area": "ชป.2",
+      "team": "อาร์์ท ชิต",
+      "google_maps": "https://maps.app.goo.gl/auDoovS9yEP7hTzr9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 4,
+      "name": "A4 - Kaysone Phomvihane District",
+      "lat": 16.508701,
+      "lng": 104.967791,
+      "frequency": 0,
+      "bank": "",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/KLFHFkbsgNKy37tu5",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 5,
+      "name": "A5 - Ban Thang Beng\nChampasak Province, Laos",
+      "lat": 14.835085,
+      "lng": 105.950013,
+      "frequency": 0,
+      "bank": "",
+      "province": "อุบล/ติดเวียดนาม",
+      "area": "ชป.4",
+      "team": "บอม พล ",
+      "google_maps": "https://maps.app.goo.gl/sQf9dFT2MNftY5fB9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 6,
+      "name": "A6 - Ban Khamhoung\nVientiane , Laos",
+      "lat": 17.962307,
+      "lng": 102.693656,
+      "frequency": 0,
+      "bank": "",
+      "province": "หนองคาย อ.ศรีเชียงใหม่",
+      "area": "ชป.2",
+      "team": "อาร์์ท ชิต",
+      "google_maps": "https://maps.app.goo.gl/tATQLJUyBXZA1fZ57",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 7,
+      "name": "L1-Patumphon",
+      "lat": 14.795122,
+      "lng": 105.9385787,
+      "frequency": 749,
+      "bank": "BAY",
+      "province": "อุบล/ติดเวียดนาม",
+      "area": "ชป.4",
+      "team": "บอม พล",
+      "google_maps": "https://maps.app.goo.gl/VmHthbYS2rA97daf6",
+      "survey_status": "สำรวจแล้ว",
+      "survey_date": "2025-01-08",
+      "surveyor": "ทีม บอม พล ชป.4",
+      "lac": "51201",
+      "ci": "34521876",
+      "ais": {
+        "dbm": "-72",
+        "status": "ใช้ได้ดี"
+      },
+      "dtac": {
+        "dbm": "-85",
+        "status": "ใช้ได้ (อ่อน)"
+      },
+      "true": {
+        "dbm": "-78",
+        "status": "ใช้ได้ดี"
+      },
+      "images": [],
+      "videos": [],
+      "notes": "พบอาคาร 4 ชั้น มีรั้วรอบขอบชิด กล้องวงจรปิดหลายจุด รถยนต์จอดหลายคัน สัญญาณไทยแรงมาก"
+    },
+    {
+      "id": 8,
+      "name": "L2",
+      "lat": 14.8349096,
+      "lng": 105.9499245,
+      "frequency": 344,
+      "bank": "BAY",
+      "province": "อุบล/ติดเวียดนาม",
+      "area": "ชป.4",
+      "team": "บอม พล ",
+      "google_maps": "https://maps.app.goo.gl/W1zFwn42eR59sUCp7",
+      "survey_status": "อยู่ระหว่างสำรวจ",
+      "survey_date": "2025-01-10",
+      "surveyor": "ทีม บอม พล ชป.4",
+      "lac": "51201",
+      "ci": "34521899",
+      "ais": {
+        "dbm": "-75",
+        "status": "ใช้ได้ดี"
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": "อยู่ใกล้ L1 กำลังเก็บข้อมูลเพิ่มเติม"
+    },
+    {
+      "id": 9,
+      "name": "L3-Pak Sa",
+      "lat": 15.1129536107321,
+      "lng": 105.861954747168,
+      "frequency": 23,
+      "bank": "BAY",
+      "province": "อุบล/ติดเวียดนาม",
+      "area": "ชป.4",
+      "team": "บอม พล ",
+      "google_maps": "https://maps.app.goo.gl/hehooCfUSHnrxQw77",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 10,
+      "name": "L4",
+      "lat": 16.1634067,
+      "lng": 105.1113733,
+      "frequency": 20,
+      "bank": "BAY",
+      "province": "อำนาจเจริญ",
+      "area": "ชป.4",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/6DFTEC75zQL5QoF67",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 11,
+      "name": "L5",
+      "lat": 16.4886556,
+      "lng": 105.0355951,
+      "frequency": 21,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/D2bT5k3iW9ZidCEv9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 12,
+      "name": "L6",
+      "lat": 16.48952,
+      "lng": 105.0346808,
+      "frequency": 10,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/vWYT9NfRHKhK1HhP9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 13,
+      "name": "L7",
+      "lat": 16.50916,
+      "lng": 104.9666933,
+      "frequency": 66,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/57CGrY2YDL83ymVi9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 14,
+      "name": "L8",
+      "lat": 16.557894559,
+      "lng": 104.8700086,
+      "frequency": 24,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/AtX1R1nuYVMCpW3s7",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 15,
+      "name": "L9-Sawannakhet Airport",
+      "lat": 16.5593562165616,
+      "lng": 104.760713600325,
+      "frequency": 6,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/Bes84die7aKhr2K79",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 16,
+      "name": "L10-Sawannakhet",
+      "lat": 16.5584414443368,
+      "lng": 104.748466880469,
+      "frequency": 6,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/ZMtrjJEWLwJjSP346",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 17,
+      "name": "L11-Sawannakhet",
+      "lat": 16.5793707462476,
+      "lng": 104.747335472314,
+      "frequency": 141,
+      "bank": "BAY",
+      "province": "มุกดาหาร",
+      "area": "ชป.4",
+      "team": "สว.โต้ง เอกแสน ชป.3 ทอฟฟี่ ชป.4",
+      "google_maps": "https://maps.app.goo.gl/b5ifZ3seoiP2HFEM6",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 18,
+      "name": "L12-Khummuan",
+      "lat": 17.9082314,
+      "lng": 104.3705569,
+      "frequency": 439,
+      "bank": "BAY",
+      "province": "นครพนม",
+      "area": "ชป.3",
+      "team": "กองโจ้ พี่แบน",
+      "google_maps": "https://maps.app.goo.gl/ZpRzvULtjX4tKHbD7",
+      "survey_status": "สำรวจแล้ว",
+      "survey_date": "2025-01-09",
+      "surveyor": "ทีม กองโจ้ พี่แบน ชป.3",
+      "lac": "51203",
+      "ci": "34527654",
+      "ais": {
+        "dbm": "-68",
+        "status": "ใช้ได้ดี"
+      },
+      "dtac": {
+        "dbm": "-71",
+        "status": "ใช้ได้ดี"
+      },
+      "true": {
+        "dbm": "-95",
+        "status": "ใช้ได้ (อ่อน)"
+      },
+      "images": [],
+      "videos": [],
+      "notes": "พื้นที่ติดแม่น้ำโขง สัญญาณไทยล้ำเข้ามาชัดเจน พบคอมพาวด์ขนาดใหญ่"
+    },
+    {
+      "id": 19,
+      "name": "L13-Bolikumsai-Kummuan",
+      "lat": 18.1036588,
+      "lng": 104.2820669,
+      "frequency": 10,
+      "bank": "BAY",
+      "province": "บึงกาฬ ติด นครพนม",
+      "area": "ชป.3",
+      "team": "ชิต พี่อ้วน",
+      "google_maps": "https://maps.app.goo.gl/2C1vxh1PzB8zAxV76",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 20,
+      "name": "L14-Chongmac",
+      "lat": 15.130981543153,
+      "lng": 105.468558365843,
+      "frequency": 2,
+      "bank": "BAY",
+      "province": "อุบล/ช่องเม็ก",
+      "area": "ชป.4",
+      "team": "บอม พล",
+      "google_maps": "https://maps.app.goo.gl/pLjxvm7SE4rv9tFG8",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 21,
+      "name": "L15-Haddonchan-Vientiane",
+      "lat": 17.9626610295691,
+      "lng": 102.602962067816,
+      "frequency": 1,
+      "bank": "BAY",
+      "province": "หนองคาย อ.ศรีเชียงใหม่",
+      "area": "ชป.2",
+      "team": "อาร์์ท ชิต",
+      "google_maps": "https://maps.app.goo.gl/B91mTBNYoWK613JH7",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 22,
+      "name": "L16",
+      "lat": 18.0470118415339,
+      "lng": 101.857540419667,
+      "frequency": 2,
+      "bank": "BAY",
+      "province": "เลย",
+      "area": "ชป.2",
+      "team": "อาร์์ท ชิต",
+      "google_maps": "https://maps.app.goo.gl/XrKk8BKFAHDTqjmx6",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 23,
+      "name": "L17",
+      "lat": 20.3812561,
+      "lng": 100.3545839,
+      "frequency": 1,
+      "bank": "BAY",
+      "province": "เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/pdrLC8wqAm74fVmT6",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 24,
+      "name": "L18",
+      "lat": 20.331565,
+      "lng": 100.088689,
+      "frequency": 7,
+      "bank": "BAY",
+      "province": "อ.เชียงแสน จ.เชียงราย(ฝั่งไทย)",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/tfs4or1ktGMDg13ZA",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 25,
+      "name": "L19",
+      "lat": 20.3305507,
+      "lng": 100.0971718,
+      "frequency": 84,
+      "bank": "BAY",
+      "province": "เชียงแสน/เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/5bGnVPxcAdfhRx819",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 26,
+      "name": "L20",
+      "lat": 20.3310712,
+      "lng": 100.0959968,
+      "frequency": 80,
+      "bank": "BAY",
+      "province": "เชียงแสน/เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/dCv2vH93nSEh4EVy9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 27,
+      "name": "L21",
+      "lat": 20.3343107,
+      "lng": 100.0971423,
+      "frequency": 87,
+      "bank": "BAY",
+      "province": "เชียงแสน/เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/VVFnENSEQaievfhP9",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 28,
+      "name": "L22",
+      "lat": 20.3351913,
+      "lng": 100.0965212,
+      "frequency": 83,
+      "bank": "BAY",
+      "province": "เชียงแสน/เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/vKF6vb8ooKBpZpb57",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    },
+    {
+      "id": 29,
+      "name": "L23",
+      "lat": 20.3346265,
+      "lng": 100.0953734,
+      "frequency": 25,
+      "bank": "BAY",
+      "province": "เชียงแสน/เชียงราย",
+      "area": "",
+      "team": "",
+      "google_maps": "https://maps.app.goo.gl/18T7wxMgqLdCXwSH6",
+      "survey_status": "ยังไม่สำรวจ",
+      "survey_date": "",
+      "surveyor": "",
+      "lac": "",
+      "ci": "",
+      "ais": {
+        "dbm": "",
+        "status": ""
+      },
+      "dtac": {
+        "dbm": "",
+        "status": ""
+      },
+      "true": {
+        "dbm": "",
+        "status": ""
+      },
+      "images": [],
+      "videos": [],
+      "notes": ""
+    }
+  ],
+  "last_updated": "2025-01-11",
+  "project": "พิกัดสแกมเมอร์ลาว Survey Map"
+}
