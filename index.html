@@ -97,7 +97,6 @@
             font-weight: 600;
         }
         .legend-icon.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-        .legend-icon.yellow { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
         .legend-icon.red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
         .legend-icon.gray { background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%); }
         
@@ -187,14 +186,6 @@
         }
         
         /* Info Window */
-        .gm-style-iw-c {
-            padding: 0 !important;
-            border-radius: 16px !important;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
-        }
-        .gm-style-iw-d {
-            overflow: hidden !important;
-        }
         .info-window {
             min-width: 280px;
             font-family: 'Prompt', sans-serif;
@@ -295,68 +286,6 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
-        /* Setup Panel */
-        .setup-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .setup-overlay.hidden { display: none; }
-        .setup-panel {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-        }
-        .setup-panel h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #1a1a2e;
-        }
-        .setup-panel p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-        .setup-panel input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: 'Prompt', sans-serif;
-            margin-bottom: 15px;
-            transition: border-color 0.3s ease;
-        }
-        .setup-panel input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .setup-panel button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Prompt', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .setup-panel button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        
         /* Responsive */
         @media (max-width: 768px) {
             .header-stats {
@@ -401,7 +330,7 @@
         </div>
     </div>
     
-    <a id="editBtn" href="#" target="_blank" class="edit-btn">
+    <a id="editBtn" href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">
         📝 แก้ไข Google Sheet
     </a>
     
@@ -445,7 +374,7 @@
     </div>
 
     <script>
-        // ฝัง Sheet ID ไว้เลย - ไม่ต้องใส่ใหม่
+        // ฝัง Sheet ID ไว้เลย
         const SHEET_ID = '1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg';
         let map, markers = [], infoWindow;
         let locationsData = [];
@@ -469,9 +398,6 @@
             });
             
             infoWindow = new google.maps.InfoWindow();
-            
-            // ฝัง Sheet ID แล้ว - โหลดข้อมูลเลย
-            document.getElementById('editBtn').href = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
             loadData();
         }
         
@@ -480,19 +406,16 @@
             const status = loc['สถานะสำรวจ'];
             const ais = loc['AIS'];
             
-            let color, label;
+            let color;
             
             if (status === 'สำรวจแล้ว') {
                 if (ais === 'ใช้งานได้') {
                     color = '#11998e'; // Green
-                    label = '✓';
                 } else {
                     color = '#eb3349'; // Red
-                    label = '✗';
                 }
             } else {
                 color = '#95a5a6'; // Gray
-                label = '?';
             }
             
             return {
@@ -543,9 +466,9 @@
                                 <div class="signal-provider" style="color:#00b2e3;">DTAC</div>
                                 <div class="signal-status">${getSignalIcon(loc['DTAC'])}</div>
                             </div>
-                            <div class="signal-card ${getSignalClass(loc['TRUE'])}">
+                            <div class="signal-card ${getSignalClass(loc['True'])}">
                                 <div class="signal-provider" style="color:#eb2227;">TRUE</div>
-                                <div class="signal-status">${getSignalIcon(loc['TRUE'])}</div>
+                                <div class="signal-status">${getSignalIcon(loc['True'])}</div>
                             </div>
                         </div>
                         
@@ -588,7 +511,7 @@
                 locationsData = json.table.rows.map(row => {
                     const obj = {};
                     cols.forEach((col, i) => {
-                        obj[col] = row.c[i] ? row.c[i].v : '';
+                        obj[col] = row.c[i] ? (row.c[i].v !== null ? row.c[i].v : '') : '';
                     });
                     return obj;
                 });
@@ -603,7 +526,7 @@
                     const lat = parseFloat(loc['ละติจูด']);
                     const lng = parseFloat(loc['ลองจิจูด']);
                     
-                    if (!lat || !lng) return;
+                    if (!lat || !lng || isNaN(lat) || isNaN(lng)) return;
                     
                     const position = { lat, lng };
                     bounds.extend(position);
@@ -632,7 +555,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                alert('ไม่สามารถโหลดข้อมูลได้\nกรุณาตรวจสอบ Sheet ID และการ Share');
+                alert('ไม่สามารถโหลดข้อมูลได้\nกรุณาตรวจสอบการ Share ของ Google Sheet\n\nError: ' + error.message);
             }
             
             document.getElementById('loading').classList.add('hidden');
