@@ -109,6 +109,14 @@
             loadData();
         }
         
+        // Helper function to get cell value safely
+        function getCellValue(row, index) {
+            if (row.c && row.c[index] && row.c[index].v !== null && row.c[index].v !== undefined) {
+                return row.c[index].v;
+            }
+            return '';
+        }
+        
         async function loadData() {
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('loadingText').textContent = 'กำลังโหลดข้อมูลจาก Google Sheet...';
@@ -118,8 +126,7 @@
                 const response = await fetch(url);
                 const text = await response.text();
                 
-                // Debug: ดูว่า Google ส่งอะไรกลับมา
-                console.log("Raw response length:", text.length);
+                console.log("📥 Raw response length:", text.length);
                 
                 // ใช้ Regex ดึงข้อมูลที่อยู่ในวงเล็บ (ตามคำแนะนำ Gemini)
                 const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/);
@@ -129,48 +136,78 @@
                 }
                 
                 const json = JSON.parse(match[1]);
-                console.log("Parsed JSON:", json);
                 
-                // Get column headers
-                const cols = json.table.cols.map(c => c.label || '');
+                // Debug: แสดง columns และจำนวน rows (ตามคำแนะนำ Gemini)
+                console.log("📊 json.table:", json.table);
+                console.log("📊 Columns:", json.table.cols);
+                console.log("📊 Number of rows:", json.table.rows ? json.table.rows.length : 'undefined');
                 
-                // Parse rows
+                // ถ้าต้องการดูข้อมูล row แรก
+                if (json.table.rows && json.table.rows.length > 0) {
+                    console.log("📊 First row (raw):", json.table.rows[0]);
+                    console.log("📊 First row.c:", json.table.rows[0].c);
+                    // แสดงค่าแต่ละ cell
+                    if (json.table.rows[0].c) {
+                        json.table.rows[0].c.forEach((cell, i) => {
+                            console.log(`   Cell[${i}]:`, cell?.v, '| formatted:', cell?.f);
+                        });
+                    }
+                }
+                
+                /*
+                 * Column Index ตาม Google Sheet:
+                 * 0: ลำดับ
+                 * 1: ชื่อโลเคชั่น
+                 * 2: ละติจูด
+                 * 3: ลองจิจูด
+                 * 4: ความถี่
+                 * 5: จังหวัดใกล้เคียง
+                 * 6: พื้นที่ ชป.
+                 * 7: กำลังพล
+                 * 8: ลิงก์ Google Maps
+                 * 9: สถานะสำรวจ
+                 * 10: วันที่สำรวจ
+                 * 11: LAC
+                 * 12: CI
+                 * 13: AIS
+                 * 14: DTAC
+                 * 15: True
+                 * 16: ลิงก์รูปภาพ
+                 * 17: ลิงก์วิดีโอ
+                 * 18: หมายเหตุ
+                 */
+                
+                // Parse rows using column INDEX (ตามคำแนะนำ Gemini)
                 locationsData = [];
                 json.table.rows.forEach((row, idx) => {
-                    const obj = {};
-                    cols.forEach((col, i) => {
-                        if (row.c && row.c[i]) {
-                            obj[col] = row.c[i].v !== null ? row.c[i].v : '';
-                        } else {
-                            obj[col] = '';
-                        }
-                    });
+                    const lat = parseFloat(getCellValue(row, 2));  // ละติจูด
+                    const lng = parseFloat(getCellValue(row, 3));  // ลองจิจูด
                     
-                    // Only add if has coordinates
-                    const lat = parseFloat(obj['ละติจูด']);
-                    const lng = parseFloat(obj['ลองจิจูด']);
+                    // Only add if has valid coordinates
                     if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
                         locationsData.push({
-                            id: obj['ลำดับ'] || idx + 1,
-                            name: obj['ชื่อโลเคชั่น'] || '',
+                            id: getCellValue(row, 0) || idx + 1,       // ลำดับ
+                            name: getCellValue(row, 1) || '',          // ชื่อโลเคชั่น
                             lat: lat,
                             lng: lng,
-                            freq: obj['ความถี่'] || 0,
-                            province: obj['จังหวัดใกล้เคียง'] || '',
-                            area: obj['พื้นที่ ชป.'] || '',
-                            team: obj['กำลังพล'] || '',
-                            gmaps: obj['ลิงก์ Google Maps'] || '',
-                            status: obj['สถานะสำรวจ'] || 'ยังไม่สำรวจ',
-                            date: obj['วันที่สำรวจ'] || '',
-                            ais: obj['AIS'] || '',
-                            dtac: obj['DTAC'] || '',
-                            true_h: obj['True'] || obj['TRUE'] || '',
-                            note: obj['หมายเหตุ'] || ''
+                            freq: getCellValue(row, 4) || 0,           // ความถี่
+                            province: getCellValue(row, 5) || '',      // จังหวัดใกล้เคียง
+                            area: getCellValue(row, 6) || '',          // พื้นที่ ชป.
+                            team: getCellValue(row, 7) || '',          // กำลังพล
+                            gmaps: getCellValue(row, 8) || '',         // ลิงก์ Google Maps
+                            status: getCellValue(row, 9) || 'ยังไม่สำรวจ',  // สถานะสำรวจ
+                            date: getCellValue(row, 10) || '',         // วันที่สำรวจ
+                            ais: getCellValue(row, 13) || '',          // AIS
+                            dtac: getCellValue(row, 14) || '',         // DTAC
+                            true_h: getCellValue(row, 15) || '',       // True
+                            note: getCellValue(row, 18) || ''          // หมายเหตุ
                         });
                     }
                 });
                 
                 console.log('✅ โหลดข้อมูลสำเร็จ:', locationsData.length, 'รายการ');
+                console.log('📍 ตัวอย่างข้อมูล:', locationsData.slice(0, 3));
+                
                 renderMarkers();
                 updateStats();
                 
@@ -179,6 +216,7 @@
                 document.getElementById('loadingText').innerHTML = `
                     <div class="error-box">
                         <h3>❌ ไม่สามารถโหลดข้อมูลได้</h3>
+                        <p>Error: ${error.message}</p>
                         <p>กรุณาตรวจสอบว่า Google Sheet ได้ทำ "Publish to web" แล้ว</p>
                         <button onclick="loadData()">ลองใหม่</button>
                     </div>
@@ -284,6 +322,7 @@
         window.initMap = initMap;
     </script>
     
+    <!-- Google Maps API with async defer (ตามคำแนะนำ Gemini) -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtMkrEmWVIp6IW6vkZ9A-7vjQKc8njTOA&callback=initMap"></script>
 </body>
 </html>
