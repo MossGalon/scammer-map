@@ -384,16 +384,6 @@
         <div class="loading-text">กำลังโหลดข้อมูล...</div>
     </div>
     
-    <div id="setupOverlay" class="setup-overlay hidden">
-        <div class="setup-panel">
-            <h2>⚙️ ตั้งค่า Google Sheet</h2>
-            <p>กรุณาใส่ Sheet ID จาก URL ของ Google Sheet<br>
-            <small style="color:#999;">https://docs.google.com/spreadsheets/d/<b>SHEET_ID</b>/edit</small></p>
-            <input type="text" id="sheetIdInput" placeholder="วาง Sheet ID ที่นี่">
-            <button onclick="saveSheetId()">เริ่มใช้งาน</button>
-        </div>
-    </div>
-    
     <div id="map"></div>
     
     <div class="header-stats">
@@ -455,7 +445,8 @@
     </div>
 
     <script>
-        let SHEET_ID = localStorage.getItem('sheet_id') || '';
+        // ฝัง Sheet ID ไว้เลย - ไม่ต้องใส่ใหม่
+        const SHEET_ID = '1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg';
         let map, markers = [], infoWindow;
         let locationsData = [];
         
@@ -479,25 +470,7 @@
             
             infoWindow = new google.maps.InfoWindow();
             
-            if (!SHEET_ID) {
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('setupOverlay').classList.remove('hidden');
-            } else {
-                document.getElementById('editBtn').href = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
-                loadData();
-            }
-        }
-        
-        // Save Sheet ID
-        function saveSheetId() {
-            const id = document.getElementById('sheetIdInput').value.trim();
-            if (!id) {
-                alert('กรุณาใส่ Sheet ID');
-                return;
-            }
-            localStorage.setItem('sheet_id', id);
-            SHEET_ID = id;
-            document.getElementById('setupOverlay').classList.add('hidden');
+            // ฝัง Sheet ID แล้ว - โหลดข้อมูลเลย
             document.getElementById('editBtn').href = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
             loadData();
         }
