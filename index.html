@@ -9,32 +9,131 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Prompt', sans-serif; }
         #map { height: 100vh; width: 100%; }
+        
+        /* Header Stats */
         .header-stats { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; gap: 25px; align-items: center; }
         .stat-box { text-align: center; padding: 0 15px; }
         .stat-box:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.2); }
         .stat-number { font-size: 32px; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stat-number.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); -webkit-background-clip: text; }
-        .stat-number.red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); -webkit-background-clip: text; }
-        .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 3px; }
-        .legend { position: absolute; bottom: 30px; left: 20px; z-index: 1000; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); min-width: 200px; }
-        .legend h4 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
-        .legend-item { display: flex; align-items: center; margin: 10px 0; font-size: 13px; color: #555; }
-        .legend-icon { width: 24px; height: 24px; border-radius: 50%; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 600; }
-        .legend-icon.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-        .legend-icon.red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
-        .legend-icon.gray { background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%); }
-        .signal-legend { position: absolute; bottom: 30px; right: 20px; z-index: 1000; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
-        .signal-legend h4 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
-        .signal-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 12px; }
-        .signal-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-        .signal-badge.ok { background: #d4edda; color: #155724; }
-        .signal-badge.no { background: #f8d7da; color: #721c24; }
+        .stat-number.orange { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); -webkit-background-clip: text; }
+        .stat-number.gray { background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%); -webkit-background-clip: text; }
+        .stat-label { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 3px; }
+        
+        /* Legend - Redesigned */
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            min-width: 280px;
+        }
+        .legend h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-section {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .legend-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .legend-section-title {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #333;
+        }
+        .legend-marker {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: 700;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .legend-marker.green { background: #11998e; }
+        .legend-marker.orange { background: #f5576c; }
+        .legend-marker.gray { background: #95a5a6; }
+        .legend-text {
+            flex: 1;
+        }
+        .legend-text strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .legend-text span {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        /* Signal Legend */
+        .signal-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        .signal-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 12px;
+        }
+        .signal-provider {
+            font-weight: 600;
+            width: 50px;
+        }
+        .signal-icons {
+            display: flex;
+            gap: 15px;
+        }
+        .signal-icons span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .sig-ok { color: #11998e; }
+        .sig-no { color: #f5576c; }
+        
+        /* Buttons */
         .refresh-btn { position: absolute; top: 20px; right: 20px; z-index: 1000; background: white; border: none; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; font-family: 'Prompt', sans-serif; font-size: 14px; transition: all 0.3s; }
         .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
         .edit-btn { position: absolute; top: 20px; left: 20px; z-index: 1000; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(102,126,234,0.4); font-family: 'Prompt', sans-serif; font-size: 14px; text-decoration: none; transition: all 0.3s; }
         .edit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(102,126,234,0.5); }
-        .info-window { min-width: 280px; font-family: 'Prompt', sans-serif; }
-        .info-header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 15px 20px; color: white; }
+        
+        /* Info Window */
+        .info-window { min-width: 300px; font-family: 'Prompt', sans-serif; }
+        .info-header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 15px 20px; color: white; border-radius: 12px 12px 0 0; }
         .info-title { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
         .info-subtitle { font-size: 12px; opacity: 0.7; }
         .info-body { padding: 15px 20px; }
@@ -45,9 +144,11 @@
         .signal-card { flex: 1; text-align: center; padding: 12px 8px; border-radius: 12px; background: #f8f9fa; }
         .signal-card.ok { background: #d4edda; }
         .signal-card.no { background: #f8d7da; }
-        .signal-provider { font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+        .signal-card-provider { font-size: 12px; font-weight: 600; margin-bottom: 5px; }
         .signal-status { font-size: 18px; }
         .btn-maps { display: block; text-align: center; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; margin-top: 15px; font-size: 13px; }
+        
+        /* Loading */
         .loading { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); display: flex; justify-content: center; align-items: center; z-index: 9999; flex-direction: column; gap: 20px; }
         .loading.hidden { display: none; }
         .loading-spinner { width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; }
@@ -57,7 +158,28 @@
         .error-box h3 { color: #eb3349; margin-bottom: 10px; }
         .error-box p { color: #666; font-size: 14px; margin-bottom: 20px; }
         .error-box button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 10px; font-family: 'Prompt', sans-serif; font-size: 14px; cursor: pointer; }
-        @media (max-width: 768px) { .header-stats { padding: 12px 15px; gap: 15px; width: 90%; } .stat-number { font-size: 24px; } .legend, .signal-legend { bottom: auto; top: 80px; width: calc(50% - 25px); padding: 15px; font-size: 11px; } .legend { left: 10px; } .signal-legend { right: 10px; } .edit-btn, .refresh-btn { display: none; } }
+        
+        /* Custom Marker Label */
+        .marker-label {
+            background: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            border: 2px solid;
+        }
+        .marker-label.green { border-color: #11998e; color: #11998e; }
+        .marker-label.orange { border-color: #f5576c; color: #f5576c; }
+        .marker-label.gray { border-color: #95a5a6; color: #95a5a6; }
+        
+        @media (max-width: 768px) { 
+            .header-stats { padding: 12px 15px; gap: 15px; width: 90%; } 
+            .stat-number { font-size: 24px; } 
+            .legend { bottom: auto; top: 80px; left: 10px; right: 10px; width: auto; max-width: none; }
+            .edit-btn, .refresh-btn { display: none; } 
+        }
     </style>
 </head>
 <body>
@@ -69,27 +191,85 @@
     <div id="map"></div>
     
     <div class="header-stats">
-        <div class="stat-box"><div class="stat-number" id="totalCount">0</div><div class="stat-label">พิกัดทั้งหมด</div></div>
-        <div class="stat-box"><div class="stat-number green" id="surveyedCount">0</div><div class="stat-label">สำรวจแล้ว</div></div>
-        <div class="stat-box"><div class="stat-number red" id="pendingCount">0</div><div class="stat-label">รอสำรวจ</div></div>
+        <div class="stat-box">
+            <div class="stat-number" id="totalCount">0</div>
+            <div class="stat-label">พิกัดทั้งหมด</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number green" id="surveyedOkCount">0</div>
+            <div class="stat-label">สำรวจแล้ว<br>มีสัญญาณ</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number orange" id="surveyedNoCount">0</div>
+            <div class="stat-label">สำรวจแล้ว<br>ไม่มีสัญญาณ</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number gray" id="pendingCount">0</div>
+            <div class="stat-label">รอสำรวจ</div>
+        </div>
     </div>
     
-    <a href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">📝 แก้ไข Google Sheet</a>
+    <a href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">📝 แก้ไขข้อมูล</a>
     
-    <button class="refresh-btn" onclick="loadData()">🔄 รีเฟรชข้อมูล</button>
+    <button class="refresh-btn" onclick="loadData()">🔄 รีเฟรช</button>
     
     <div class="legend">
-        <h4>🗺️ สถานะการสำรวจ</h4>
-        <div class="legend-item"><div class="legend-icon green">✓</div><span>สำรวจแล้ว - AIS ใช้ได้</span></div>
-        <div class="legend-item"><div class="legend-icon red">✗</div><span>สำรวจแล้ว - ใช้ไม่ได้ทุกค่าย</span></div>
-        <div class="legend-item"><div class="legend-icon gray">?</div><span>ยังไม่สำรวจ</span></div>
-    </div>
-    
-    <div class="signal-legend">
-        <h4>📶 สัญลักษณ์สัญญาณ</h4>
-        <div class="signal-row"><span style="color:#00a651;font-weight:600;">AIS</span><span class="signal-badge ok">✓ ใช้ได้</span><span class="signal-badge no">✗ ใช้ไม่ได้</span></div>
-        <div class="signal-row"><span style="color:#00b2e3;font-weight:600;">DTAC</span><span class="signal-badge ok">✓ ใช้ได้</span><span class="signal-badge no">✗ ใช้ไม่ได้</span></div>
-        <div class="signal-row"><span style="color:#eb2227;font-weight:600;">TRUE</span><span class="signal-badge ok">✓ ใช้ได้</span><span class="signal-badge no">✗ ใช้ไม่ได้</span></div>
+        <h4>📍 คำอธิบายแผนที่</h4>
+        
+        <div class="legend-section">
+            <div class="legend-section-title">ความหมายของสี</div>
+            
+            <div class="legend-item">
+                <div class="legend-marker green">✓</div>
+                <div class="legend-text">
+                    <strong>สำรวจแล้ว - มีสัญญาณ AIS</strong>
+                    <span>สามารถใช้มือถือ AIS ติดตามได้</span>
+                </div>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-marker orange">✗</div>
+                <div class="legend-text">
+                    <strong>สำรวจแล้ว - ไม่มีสัญญาณ</strong>
+                    <span>ทุกค่ายใช้งานไม่ได้ในพื้นที่นี้</span>
+                </div>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-marker gray">?</div>
+                <div class="legend-text">
+                    <strong>รอสำรวจ</strong>
+                    <span>ยังไม่มีข้อมูลสัญญาณ</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend-section">
+            <div class="legend-section-title">สัญลักษณ์สัญญาณ (คลิกที่จุดเพื่อดู)</div>
+            <div class="signal-box">
+                <div class="signal-row">
+                    <span class="signal-provider" style="color:#00a651;">AIS</span>
+                    <div class="signal-icons">
+                        <span class="sig-ok">✓ ใช้ได้</span>
+                        <span class="sig-no">✗ ใช้ไม่ได้</span>
+                    </div>
+                </div>
+                <div class="signal-row">
+                    <span class="signal-provider" style="color:#00b2e3;">DTAC</span>
+                    <div class="signal-icons">
+                        <span class="sig-ok">✓ ใช้ได้</span>
+                        <span class="sig-no">✗ ใช้ไม่ได้</span>
+                    </div>
+                </div>
+                <div class="signal-row">
+                    <span class="signal-provider" style="color:#eb2227;">TRUE</span>
+                    <div class="signal-icons">
+                        <span class="sig-ok">✓ ใช้ได้</span>
+                        <span class="sig-no">✗ ใช้ไม่ได้</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -109,7 +289,6 @@
             loadData();
         }
         
-        // Helper function to get cell value safely
         function getCellValue(row, index) {
             if (row.c && row.c[index] && row.c[index].v !== null && row.c[index].v !== undefined) {
                 return row.c[index].v;
@@ -126,9 +305,6 @@
                 const response = await fetch(url);
                 const text = await response.text();
                 
-                console.log("📥 Raw response length:", text.length);
-                
-                // ใช้ Regex ดึงข้อมูลที่อยู่ในวงเล็บ (ตามคำแนะนำ Gemini)
                 const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/);
                 
                 if (!match || !match[1]) {
@@ -137,76 +313,33 @@
                 
                 const json = JSON.parse(match[1]);
                 
-                // Debug: แสดง columns และจำนวน rows (ตามคำแนะนำ Gemini)
-                console.log("📊 json.table:", json.table);
-                console.log("📊 Columns:", json.table.cols);
-                console.log("📊 Number of rows:", json.table.rows ? json.table.rows.length : 'undefined');
-                
-                // ถ้าต้องการดูข้อมูล row แรก
-                if (json.table.rows && json.table.rows.length > 0) {
-                    console.log("📊 First row (raw):", json.table.rows[0]);
-                    console.log("📊 First row.c:", json.table.rows[0].c);
-                    // แสดงค่าแต่ละ cell
-                    if (json.table.rows[0].c) {
-                        json.table.rows[0].c.forEach((cell, i) => {
-                            console.log(`   Cell[${i}]:`, cell?.v, '| formatted:', cell?.f);
-                        });
-                    }
-                }
-                
-                /*
-                 * Column Index ตาม Google Sheet:
-                 * 0: ลำดับ
-                 * 1: ชื่อโลเคชั่น
-                 * 2: ละติจูด
-                 * 3: ลองจิจูด
-                 * 4: ความถี่
-                 * 5: จังหวัดใกล้เคียง
-                 * 6: พื้นที่ ชป.
-                 * 7: กำลังพล
-                 * 8: ลิงก์ Google Maps
-                 * 9: สถานะสำรวจ
-                 * 10: วันที่สำรวจ
-                 * 11: LAC
-                 * 12: CI
-                 * 13: AIS
-                 * 14: DTAC
-                 * 15: True
-                 * 16: ลิงก์รูปภาพ
-                 * 17: ลิงก์วิดีโอ
-                 * 18: หมายเหตุ
-                 */
-                
-                // Parse rows using column INDEX (ตามคำแนะนำ Gemini)
                 locationsData = [];
                 json.table.rows.forEach((row, idx) => {
-                    const lat = parseFloat(getCellValue(row, 2));  // ละติจูด
-                    const lng = parseFloat(getCellValue(row, 3));  // ลองจิจูด
+                    const lat = parseFloat(getCellValue(row, 2));
+                    const lng = parseFloat(getCellValue(row, 3));
                     
-                    // Only add if has valid coordinates
                     if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
                         locationsData.push({
-                            id: getCellValue(row, 0) || idx + 1,       // ลำดับ
-                            name: getCellValue(row, 1) || '',          // ชื่อโลเคชั่น
+                            id: getCellValue(row, 0) || idx + 1,
+                            name: getCellValue(row, 1) || '',
                             lat: lat,
                             lng: lng,
-                            freq: getCellValue(row, 4) || 0,           // ความถี่
-                            province: getCellValue(row, 5) || '',      // จังหวัดใกล้เคียง
-                            area: getCellValue(row, 6) || '',          // พื้นที่ ชป.
-                            team: getCellValue(row, 7) || '',          // กำลังพล
-                            gmaps: getCellValue(row, 8) || '',         // ลิงก์ Google Maps
-                            status: getCellValue(row, 9) || 'ยังไม่สำรวจ',  // สถานะสำรวจ
-                            date: getCellValue(row, 10) || '',         // วันที่สำรวจ
-                            ais: getCellValue(row, 13) || '',          // AIS
-                            dtac: getCellValue(row, 14) || '',         // DTAC
-                            true_h: getCellValue(row, 15) || '',       // True
-                            note: getCellValue(row, 18) || ''          // หมายเหตุ
+                            freq: getCellValue(row, 4) || 0,
+                            province: getCellValue(row, 5) || '',
+                            area: getCellValue(row, 6) || '',
+                            team: getCellValue(row, 7) || '',
+                            gmaps: getCellValue(row, 8) || '',
+                            status: getCellValue(row, 9) || 'ยังไม่สำรวจ',
+                            date: getCellValue(row, 10) || '',
+                            ais: getCellValue(row, 13) || '',
+                            dtac: getCellValue(row, 14) || '',
+                            true_h: getCellValue(row, 15) || '',
+                            note: getCellValue(row, 18) || ''
                         });
                     }
                 });
                 
                 console.log('✅ โหลดข้อมูลสำเร็จ:', locationsData.length, 'รายการ');
-                console.log('📍 ตัวอย่างข้อมูล:', locationsData.slice(0, 3));
                 
                 renderMarkers();
                 updateStats();
@@ -217,7 +350,6 @@
                     <div class="error-box">
                         <h3>❌ ไม่สามารถโหลดข้อมูลได้</h3>
                         <p>Error: ${error.message}</p>
-                        <p>กรุณาตรวจสอบว่า Google Sheet ได้ทำ "Publish to web" แล้ว</p>
                         <button onclick="loadData()">ลองใหม่</button>
                     </div>
                 `;
@@ -227,24 +359,45 @@
             document.getElementById('loading').classList.add('hidden');
         }
         
-        function getIcon(loc) {
-            let color = '#95a5a6'; // Gray - not surveyed
+        function getMarkerColor(loc) {
             if (loc.status === 'สำรวจแล้ว') {
-                color = loc.ais === 'ใช้งานได้' ? '#11998e' : '#eb3349'; // Green or Red
+                return loc.ais === 'ใช้งานได้' ? 'green' : 'orange';
             }
+            return 'gray';
+        }
+        
+        function getMarkerIcon(loc) {
+            const color = getMarkerColor(loc);
+            const colors = {
+                green: '#11998e',
+                orange: '#f5576c',
+                gray: '#95a5a6'
+            };
+            const symbols = {
+                green: '✓',
+                orange: '✗',
+                gray: '?'
+            };
+            
             return {
                 path: google.maps.SymbolPath.CIRCLE,
-                fillColor: color,
+                fillColor: colors[color],
                 fillOpacity: 1,
                 strokeColor: '#fff',
                 strokeWeight: 3,
-                scale: 12
+                scale: 14
             };
         }
         
         function createInfo(loc) {
             const gc = v => v === 'ใช้งานได้' ? 'ok' : (v === 'ใช้งานไม่ได้' ? 'no' : '');
             const gi = v => v === 'ใช้งานได้' ? '✓' : (v === 'ใช้งานไม่ได้' ? '✗' : '-');
+            const color = getMarkerColor(loc);
+            const statusText = {
+                green: '✅ มีสัญญาณ AIS',
+                orange: '❌ ไม่มีสัญญาณ',
+                gray: '⏳ รอสำรวจ'
+            };
             
             return `
                 <div class="info-window">
@@ -253,25 +406,35 @@
                         <div class="info-subtitle">#${loc.id} • ${loc.province || '-'}</div>
                     </div>
                     <div class="info-body">
-                        <div class="info-row"><span class="info-label">สถานะ</span><span class="info-value">${loc.status}</span></div>
-                        <div class="info-row"><span class="info-label">พื้นที่</span><span class="info-value">${loc.area || '-'}</span></div>
-                        <div class="info-row"><span class="info-label">ความถี่</span><span class="info-value">${loc.freq || '-'}</span></div>
-                        <div class="info-row"><span class="info-label">กำลังพล</span><span class="info-value">${loc.team || '-'}</span></div>
+                        <div class="info-row">
+                            <span class="info-label">สถานะ</span>
+                            <span class="info-value">${statusText[color]}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">พื้นที่ ชป.</span>
+                            <span class="info-value">${loc.area || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">กำลังพล</span>
+                            <span class="info-value">${loc.team || '-'}</span>
+                        </div>
+                        ${loc.status === 'สำรวจแล้ว' ? `
                         <div class="signal-grid">
                             <div class="signal-card ${gc(loc.ais)}">
-                                <div class="signal-provider" style="color:#00a651;">AIS</div>
+                                <div class="signal-card-provider" style="color:#00a651;">AIS</div>
                                 <div class="signal-status">${gi(loc.ais)}</div>
                             </div>
                             <div class="signal-card ${gc(loc.dtac)}">
-                                <div class="signal-provider" style="color:#00b2e3;">DTAC</div>
+                                <div class="signal-card-provider" style="color:#00b2e3;">DTAC</div>
                                 <div class="signal-status">${gi(loc.dtac)}</div>
                             </div>
                             <div class="signal-card ${gc(loc.true_h)}">
-                                <div class="signal-provider" style="color:#eb2227;">TRUE</div>
+                                <div class="signal-card-provider" style="color:#eb2227;">TRUE</div>
                                 <div class="signal-status">${gi(loc.true_h)}</div>
                             </div>
                         </div>
-                        ${loc.note ? `<p style="margin-top:15px;padding:10px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666;">${loc.note}</p>` : ''}
+                        ` : ''}
+                        ${loc.note ? `<p style="margin-top:15px;padding:10px;background:#f8f9fa;border-radius:8px;font-size:12px;color:#666;">📝 ${loc.note}</p>` : ''}
                         ${loc.gmaps ? `<a href="${loc.gmaps}" target="_blank" class="btn-maps">📍 เปิดใน Google Maps</a>` : ''}
                     </div>
                 </div>
@@ -279,8 +442,10 @@
         }
         
         function renderMarkers() {
-            // Clear existing markers
-            markers.forEach(m => m.setMap(null));
+            markers.forEach(m => {
+                m.marker.setMap(null);
+                if (m.label) m.label.setMap(null);
+            });
             markers = [];
             
             const bounds = new google.maps.LatLngBounds();
@@ -289,11 +454,43 @@
                 const position = { lat: loc.lat, lng: loc.lng };
                 bounds.extend(position);
                 
+                const color = getMarkerColor(loc);
+                const symbols = { green: '✓', orange: '✗', gray: '?' };
+                
+                // Main marker
                 const marker = new google.maps.Marker({
                     position: position,
                     map: map,
-                    icon: getIcon(loc),
-                    title: loc.name
+                    icon: getMarkerIcon(loc),
+                    title: loc.name,
+                    label: {
+                        text: symbols[color],
+                        color: 'white',
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                    }
+                });
+                
+                // Label with name
+                const labelDiv = document.createElement('div');
+                const shortName = loc.name.split(' - ')[0] || loc.name.substring(0, 10);
+                
+                const labelMarker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: {
+                        url: 'data:image/svg+xml,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>
+                        `),
+                        anchor: new google.maps.Point(0, -20)
+                    },
+                    label: {
+                        text: shortName,
+                        color: color === 'green' ? '#11998e' : (color === 'orange' ? '#f5576c' : '#95a5a6'),
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        fontFamily: 'Prompt, sans-serif'
+                    }
                 });
                 
                 marker.addListener('click', () => {
@@ -301,7 +498,7 @@
                     infoWindow.open(map, marker);
                 });
                 
-                markers.push(marker);
+                markers.push({ marker, label: labelMarker });
             });
             
             if (markers.length > 0) {
@@ -311,18 +508,19 @@
         
         function updateStats() {
             const total = locationsData.length;
-            const surveyed = locationsData.filter(l => l.status === 'สำรวจแล้ว').length;
-            const pending = total - surveyed;
+            const surveyedOk = locationsData.filter(l => l.status === 'สำรวจแล้ว' && l.ais === 'ใช้งานได้').length;
+            const surveyedNo = locationsData.filter(l => l.status === 'สำรวจแล้ว' && l.ais !== 'ใช้งานได้').length;
+            const pending = locationsData.filter(l => l.status !== 'สำรวจแล้ว').length;
             
             document.getElementById('totalCount').textContent = total;
-            document.getElementById('surveyedCount').textContent = surveyed;
+            document.getElementById('surveyedOkCount').textContent = surveyedOk;
+            document.getElementById('surveyedNoCount').textContent = surveyedNo;
             document.getElementById('pendingCount').textContent = pending;
         }
         
         window.initMap = initMap;
     </script>
     
-    <!-- Google Maps API with async defer (ตามคำแนะนำ Gemini) -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtMkrEmWVIp6IW6vkZ9A-7vjQKc8njTOA&callback=initMap"></script>
 </body>
 </html>
