@@ -147,6 +147,41 @@
         }
         .distance-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17,153,142,0.5); }
         .distance-btn.active { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); box-shadow: 0 4px 15px rgba(235,51,73,0.4); }
+        
+        .ruler-btn { 
+            position: absolute; 
+            top: 20px; 
+            right: 260px; 
+            z-index: 1000; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white;
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4); 
+            cursor: pointer; 
+            font-family: 'Prompt', sans-serif; 
+            font-size: 14px; 
+            transition: all 0.3s; 
+        }
+        .ruler-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
+        .ruler-btn.active { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); box-shadow: 0 4px 15px rgba(235,51,73,0.4); }
+        
+        .ruler-info {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-size: 14px;
+            display: none;
+        }
+        .ruler-info.show { display: block; }
+        .ruler-info .distance { font-size: 24px; font-weight: 700; color: #667eea; }
+        .ruler-info .hint { font-size: 12px; color: #666; margin-top: 5px; }
         .edit-btn { position: absolute; top: 20px; left: 20px; z-index: 1000; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(102,126,234,0.4); font-family: 'Prompt', sans-serif; font-size: 14px; text-decoration: none; transition: all 0.3s; }
         .edit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(102,126,234,0.5); }
         
@@ -293,6 +328,30 @@
                 padding: 0;
             }
             .distance-btn span { display: none; }
+            
+            /* ปุ่มไม้บรรทัด */
+            .ruler-btn {
+                right: 180px;
+                bottom: 25px;
+                top: auto;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                padding: 0;
+            }
+            .ruler-btn span { display: none; }
+            
+            .ruler-info {
+                top: auto;
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -328,6 +387,13 @@
     <button class="refresh-btn" onclick="loadData()">🔄<span> รีเฟรช</span></button>
     
     <button class="distance-btn" onclick="toggleDistanceLines()">📏<span> วัดระยะ</span></button>
+    
+    <button class="ruler-btn" onclick="toggleRuler()">📐<span> ไม้บรรทัด</span></button>
+    
+    <div class="ruler-info" id="rulerInfo">
+        <div class="distance" id="rulerDistance">0.00 km</div>
+        <div class="hint" id="rulerHint">คลิกจุดแรกบนแผนที่</div>
+    </div>
     
     <div class="legend" onclick="this.classList.toggle('active')">
         <h4>📍 คำอธิบายแผนที่ <small style="font-weight:normal;font-size:11px;opacity:0.6;">(แตะเพื่อดู)</small></h4>
@@ -759,6 +825,105 @@ const THAI_BORDER = [
             }
             
             showingDistances = !showingDistances;
+        }
+        
+        // ===== ไม้บรรทัดวัดระยะเอง =====
+        let rulerActive = false;
+        let rulerPoints = [];
+        let rulerMarkers = [];
+        let rulerLine = null;
+        let rulerClickListener = null;
+        
+        function toggleRuler() {
+            const btn = document.querySelector('.ruler-btn');
+            const info = document.getElementById('rulerInfo');
+            
+            if (rulerActive) {
+                // ปิดไม้บรรทัด
+                clearRuler();
+                btn.classList.remove('active');
+                btn.innerHTML = '📐<span> ไม้บรรทัด</span>';
+                info.classList.remove('show');
+                if (rulerClickListener) {
+                    google.maps.event.removeListener(rulerClickListener);
+                    rulerClickListener = null;
+                }
+            } else {
+                // เปิดไม้บรรทัด
+                btn.classList.add('active');
+                btn.innerHTML = '❌<span> ปิดไม้บรรทัด</span>';
+                info.classList.add('show');
+                document.getElementById('rulerHint').textContent = 'คลิกจุดแรกบนแผนที่';
+                document.getElementById('rulerDistance').textContent = '0.00 km';
+                
+                // เพิ่ม click listener
+                rulerClickListener = map.addListener('click', onRulerClick);
+            }
+            
+            rulerActive = !rulerActive;
+        }
+        
+        function onRulerClick(e) {
+            const lat = e.latLng.lat();
+            const lng = e.latLng.lng();
+            
+            // เพิ่ม marker
+            const marker = new google.maps.Marker({
+                position: { lat, lng },
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: '#667eea',
+                    fillOpacity: 1,
+                    strokeColor: '#fff',
+                    strokeWeight: 3
+                },
+                label: {
+                    text: (rulerPoints.length + 1).toString(),
+                    color: '#fff',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            });
+            rulerMarkers.push(marker);
+            rulerPoints.push({ lat, lng });
+            
+            if (rulerPoints.length === 1) {
+                document.getElementById('rulerHint').textContent = 'คลิกจุดที่ 2 เพื่อวัดระยะ';
+            } else if (rulerPoints.length === 2) {
+                // คำนวณและแสดงระยะ
+                const dist = haversineDistance(
+                    rulerPoints[0].lat, rulerPoints[0].lng,
+                    rulerPoints[1].lat, rulerPoints[1].lng
+                );
+                document.getElementById('rulerDistance').textContent = dist.toFixed(2) + ' km';
+                document.getElementById('rulerHint').textContent = 'คลิก "ล้าง" หรือคลิกจุดใหม่';
+                
+                // วาดเส้น
+                rulerLine = new google.maps.Polyline({
+                    path: rulerPoints,
+                    geodesic: true,
+                    strokeColor: '#667eea',
+                    strokeOpacity: 1,
+                    strokeWeight: 3,
+                    map: map
+                });
+            } else {
+                // รีเซ็ตและเริ่มใหม่
+                clearRuler();
+                onRulerClick(e); // เรียกใหม่กับจุดนี้
+            }
+        }
+        
+        function clearRuler() {
+            rulerMarkers.forEach(m => m.setMap(null));
+            rulerMarkers = [];
+            rulerPoints = [];
+            if (rulerLine) {
+                rulerLine.setMap(null);
+                rulerLine = null;
+            }
         }
         
         // วาดเส้นระยะทาง
