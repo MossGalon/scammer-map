@@ -394,37 +394,71 @@
         let distanceLines = [], distanceLabels = [];
         let showingDistances = false;
         
-        // พิกัดแม่น้ำโขง (ชายแดนไทย-ลาว) จากเหนือลงใต้
+        // พิกัดแม่น้ำโขง (ชายแดนไทย-ลาว) - เพิ่มจุดให้ละเอียดขึ้น
         const MEKONG_BORDER = [
             // เชียงราย - สามเหลี่ยมทองคำ
-            { lat: 20.35, lng: 100.08, name: 'สามเหลี่ยมทองคำ' },
-            { lat: 20.28, lng: 100.10, name: 'เชียงแสน' },
-            { lat: 20.26, lng: 100.40, name: 'เชียงของ' },
+            { lat: 20.35, lng: 100.08 },
+            { lat: 20.32, lng: 100.09 },
+            { lat: 20.28, lng: 100.10 },
+            { lat: 20.26, lng: 100.15 },
+            { lat: 20.25, lng: 100.20 },
+            { lat: 20.24, lng: 100.25 },
+            { lat: 20.23, lng: 100.30 },
+            { lat: 20.24, lng: 100.35 },
+            { lat: 20.26, lng: 100.40 },
+            // ต่อลงไป
+            { lat: 19.90, lng: 100.50 },
+            { lat: 19.50, lng: 100.80 },
+            { lat: 19.00, lng: 101.10 },
+            { lat: 18.50, lng: 101.30 },
             // เลย
-            { lat: 17.89, lng: 101.46, name: 'ท่าลี่' },
-            { lat: 17.73, lng: 101.39, name: 'เชียงคาน' },
+            { lat: 17.89, lng: 101.46 },
+            { lat: 17.80, lng: 101.42 },
+            { lat: 17.73, lng: 101.39 },
+            { lat: 17.65, lng: 101.50 },
+            { lat: 17.60, lng: 101.70 },
+            { lat: 17.65, lng: 101.90 },
+            { lat: 17.70, lng: 102.10 },
+            { lat: 17.75, lng: 102.30 },
+            { lat: 17.80, lng: 102.50 },
             // หนองคาย
-            { lat: 17.88, lng: 102.74, name: 'หนองคาย' },
-            { lat: 17.96, lng: 102.60, name: 'ศรีเชียงใหม่' },
+            { lat: 17.88, lng: 102.74 },
+            { lat: 17.90, lng: 102.90 },
+            { lat: 17.96, lng: 103.10 },
+            { lat: 18.00, lng: 103.30 },
+            { lat: 18.10, lng: 103.50 },
             // บึงกาฬ
-            { lat: 18.36, lng: 103.65, name: 'บึงกาฬ' },
-            { lat: 18.10, lng: 104.28, name: 'บ้านแพง' },
+            { lat: 18.36, lng: 103.65 },
+            { lat: 18.30, lng: 103.80 },
+            { lat: 18.20, lng: 104.00 },
+            { lat: 18.10, lng: 104.28 },
             // นครพนม
-            { lat: 17.90, lng: 104.37, name: 'ท่าอุเทน' },
-            { lat: 17.41, lng: 104.78, name: 'นครพนม' },
+            { lat: 17.90, lng: 104.37 },
+            { lat: 17.70, lng: 104.50 },
+            { lat: 17.50, lng: 104.65 },
+            { lat: 17.41, lng: 104.78 },
+            { lat: 17.20, lng: 104.80 },
+            { lat: 17.00, lng: 104.78 },
+            { lat: 16.80, lng: 104.75 },
             // มุกดาหาร
-            { lat: 16.54, lng: 104.72, name: 'มุกดาหาร' },
-            { lat: 16.49, lng: 104.97, name: 'ดอนตาล' },
-            // อำนาจเจริญ/อุบลราชธานี
-            { lat: 16.16, lng: 105.11, name: 'เขมราฐ' },
-            { lat: 15.63, lng: 105.52, name: 'โขงเจียม' },
-            { lat: 15.14, lng: 105.47, name: 'ช่องเม็ก' },
-            { lat: 14.94, lng: 105.93, name: 'น้ำยืน' },
+            { lat: 16.54, lng: 104.72 },
+            { lat: 16.50, lng: 104.80 },
+            { lat: 16.49, lng: 104.97 },
+            { lat: 16.40, lng: 105.05 },
+            // อุบลราชธานี
+            { lat: 16.16, lng: 105.11 },
+            { lat: 16.00, lng: 105.20 },
+            { lat: 15.80, lng: 105.35 },
+            { lat: 15.63, lng: 105.52 },
+            { lat: 15.40, lng: 105.50 },
+            { lat: 15.14, lng: 105.47 },
+            { lat: 15.00, lng: 105.60 },
+            { lat: 14.94, lng: 105.93 },
         ];
         
-        // คำนวณระยะทาง (Haversine formula)
+        // คำนวณระยะทาง Haversine
         function haversineDistance(lat1, lng1, lat2, lng2) {
-            const R = 6371; // รัศมีโลก (km)
+            const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLng = (lng2 - lng1) * Math.PI / 180;
             const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -434,20 +468,38 @@
             return R * c;
         }
         
-        // หาจุดชายแดนที่ใกล้ที่สุด
+        // หาจุดที่ใกล้ที่สุดบนเส้น (line segment)
+        function nearestPointOnSegment(px, py, ax, ay, bx, by) {
+            const dx = bx - ax;
+            const dy = by - ay;
+            const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
+            return {
+                lat: ay + t * dy,
+                lng: ax + t * dx
+            };
+        }
+        
+        // หาจุดบนแม่น้ำโขงที่ใกล้ที่สุด
         function findNearestBorderPoint(lat, lng) {
-            let nearest = null;
+            let nearestPoint = null;
             let minDistance = Infinity;
             
-            MEKONG_BORDER.forEach(point => {
-                const dist = haversineDistance(lat, lng, point.lat, point.lng);
+            // วนลูปทุก segment ของแม่น้ำโขง
+            for (let i = 0; i < MEKONG_BORDER.length - 1; i++) {
+                const a = MEKONG_BORDER[i];
+                const b = MEKONG_BORDER[i + 1];
+                
+                // หาจุดที่ใกล้ที่สุดบน segment นี้
+                const nearest = nearestPointOnSegment(lng, lat, a.lng, a.lat, b.lng, b.lat);
+                const dist = haversineDistance(lat, lng, nearest.lat, nearest.lng);
+                
                 if (dist < minDistance) {
                     minDistance = dist;
-                    nearest = point;
+                    nearestPoint = nearest;
                 }
-            });
+            }
             
-            return { point: nearest, distance: minDistance };
+            return { point: nearestPoint, distance: minDistance };
         }
         
         // เปิด/ปิด แสดงระยะทาง
@@ -657,7 +709,7 @@
             
             // คำนวณระยะห่างจากชายแดน
             const nearest = findNearestBorderPoint(loc.lat, loc.lng);
-            const distanceText = `${nearest.distance.toFixed(1)} km (${nearest.point.name})`;
+            const distanceText = `${nearest.distance.toFixed(1)} km`;
             
             return `
                 <div class="info-window">
