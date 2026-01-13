@@ -128,6 +128,25 @@
         /* Buttons */
         .refresh-btn { position: absolute; top: 20px; right: 20px; z-index: 1000; background: white; border: none; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; font-family: 'Prompt', sans-serif; font-size: 14px; transition: all 0.3s; }
         .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        
+        .distance-btn { 
+            position: absolute; 
+            top: 20px; 
+            right: 140px; 
+            z-index: 1000; 
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+            color: white;
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(17,153,142,0.4); 
+            cursor: pointer; 
+            font-family: 'Prompt', sans-serif; 
+            font-size: 14px; 
+            transition: all 0.3s; 
+        }
+        .distance-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17,153,142,0.5); }
+        .distance-btn.active { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); box-shadow: 0 4px 15px rgba(235,51,73,0.4); }
         .edit-btn { position: absolute; top: 20px; left: 20px; z-index: 1000; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(102,126,234,0.4); font-family: 'Prompt', sans-serif; font-size: 14px; text-decoration: none; transition: all 0.3s; }
         .edit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(102,126,234,0.5); }
         
@@ -189,68 +208,91 @@
             .stat-number { font-size: 18px; } 
             .stat-label { font-size: 9px; line-height: 1.2; }
             
-            /* Legend พับได้ */
+            /* Legend เล็กกะทัดรัด ไม่บังแผนที่ */
             .legend {
                 bottom: 20px;
                 left: 10px;
-                right: 10px;
+                right: auto;
                 top: auto;
                 width: auto;
-                max-height: 50px;
+                max-width: 200px;
+                max-height: 45px;
                 overflow: hidden;
                 transition: max-height 0.3s ease-out;
                 min-width: 0;
-                padding: 12px 15px;
+                padding: 10px 12px;
                 cursor: pointer;
             }
             .legend.active {
-                max-height: 70vh;
+                max-height: 350px;
+                max-width: 280px;
                 overflow-y: auto;
             }
             .legend.active h4::after {
                 content: ' ▴';
             }
+            .legend h4 { font-size: 13px; margin-bottom: 0; }
+            .legend.active h4 { margin-bottom: 12px; }
             .legend h4 small { display: inline; }
             .legend h4::after {
                 content: ' ▾';
             }
-            .legend-section { margin-bottom: 10px; padding-bottom: 10px; }
-            .legend-item { margin: 6px 0; }
-            .legend-marker { width: 26px; height: 26px; font-size: 12px; margin-right: 10px; }
-            .legend-text strong { font-size: 12px; }
-            .legend-text span { font-size: 10px; }
-            .signal-box { padding: 8px; margin-top: 8px; }
-            .signal-row { font-size: 11px; padding: 4px 0; }
+            .legend-section { margin-bottom: 8px; padding-bottom: 8px; }
+            .legend-section-title { font-size: 10px; margin-bottom: 6px; }
+            .legend-item { margin: 5px 0; }
+            .legend-marker { width: 22px; height: 22px; font-size: 10px; margin-right: 8px; border-width: 2px; }
+            .legend-text strong { font-size: 11px; }
+            .legend-text span { font-size: 9px; }
+            .signal-box { padding: 6px; margin-top: 6px; }
+            .signal-row { font-size: 10px; padding: 3px 0; }
+            .signal-provider { width: 40px; }
             
             /* ปุ่มวงกลมด้านล่าง */
             .edit-btn { 
-                left: 15px; 
-                bottom: 90px; 
+                left: auto;
+                right: 70px; 
+                bottom: 25px; 
                 top: auto;
-                width: 50px;
-                height: 50px;
+                width: 45px;
+                height: 45px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 22px;
+                font-size: 18px;
                 padding: 0;
             }
             .edit-btn span { display: none; }
             .refresh-btn { 
                 right: 15px; 
-                bottom: 90px; 
+                bottom: 25px; 
                 top: auto;
-                width: 50px;
-                height: 50px;
+                width: 45px;
+                height: 45px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 22px;
+                font-size: 18px;
                 padding: 0;
             }
             .refresh-btn span { display: none; }
+            
+            /* ปุ่มวัดระยะ */
+            .distance-btn {
+                right: 125px;
+                bottom: 25px;
+                top: auto;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                padding: 0;
+            }
+            .distance-btn span { display: none; }
         }
     </style>
 </head>
@@ -284,6 +326,8 @@
     <a href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">📝<span> แก้ไขข้อมูล</span></a>
     
     <button class="refresh-btn" onclick="loadData()">🔄<span> รีเฟรช</span></button>
+    
+    <button class="distance-btn" onclick="toggleDistanceLines()">📏<span> วัดระยะ</span></button>
     
     <div class="legend" onclick="this.classList.toggle('active')">
         <h4>📍 คำอธิบายแผนที่ <small style="font-weight:normal;font-size:11px;opacity:0.6;">(แตะเพื่อดู)</small></h4>
@@ -347,6 +391,146 @@
     <script>
         const SHEET_ID = '1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg';
         let map, markers = [], infoWindow, locationsData = [];
+        let distanceLines = [], distanceLabels = [];
+        let showingDistances = false;
+        
+        // พิกัดแม่น้ำโขง (ชายแดนไทย-ลาว) จากเหนือลงใต้
+        const MEKONG_BORDER = [
+            // เชียงราย - สามเหลี่ยมทองคำ
+            { lat: 20.35, lng: 100.08, name: 'สามเหลี่ยมทองคำ' },
+            { lat: 20.28, lng: 100.10, name: 'เชียงแสน' },
+            { lat: 20.26, lng: 100.40, name: 'เชียงของ' },
+            // เลย
+            { lat: 17.89, lng: 101.46, name: 'ท่าลี่' },
+            { lat: 17.73, lng: 101.39, name: 'เชียงคาน' },
+            // หนองคาย
+            { lat: 17.88, lng: 102.74, name: 'หนองคาย' },
+            { lat: 17.96, lng: 102.60, name: 'ศรีเชียงใหม่' },
+            // บึงกาฬ
+            { lat: 18.36, lng: 103.65, name: 'บึงกาฬ' },
+            { lat: 18.10, lng: 104.28, name: 'บ้านแพง' },
+            // นครพนม
+            { lat: 17.90, lng: 104.37, name: 'ท่าอุเทน' },
+            { lat: 17.41, lng: 104.78, name: 'นครพนม' },
+            // มุกดาหาร
+            { lat: 16.54, lng: 104.72, name: 'มุกดาหาร' },
+            { lat: 16.49, lng: 104.97, name: 'ดอนตาล' },
+            // อำนาจเจริญ/อุบลราชธานี
+            { lat: 16.16, lng: 105.11, name: 'เขมราฐ' },
+            { lat: 15.63, lng: 105.52, name: 'โขงเจียม' },
+            { lat: 15.14, lng: 105.47, name: 'ช่องเม็ก' },
+            { lat: 14.94, lng: 105.93, name: 'น้ำยืน' },
+        ];
+        
+        // คำนวณระยะทาง (Haversine formula)
+        function haversineDistance(lat1, lng1, lat2, lng2) {
+            const R = 6371; // รัศมีโลก (km)
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+        
+        // หาจุดชายแดนที่ใกล้ที่สุด
+        function findNearestBorderPoint(lat, lng) {
+            let nearest = null;
+            let minDistance = Infinity;
+            
+            MEKONG_BORDER.forEach(point => {
+                const dist = haversineDistance(lat, lng, point.lat, point.lng);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    nearest = point;
+                }
+            });
+            
+            return { point: nearest, distance: minDistance };
+        }
+        
+        // เปิด/ปิด แสดงระยะทาง
+        function toggleDistanceLines() {
+            const btn = document.querySelector('.distance-btn');
+            
+            if (showingDistances) {
+                clearDistanceLines();
+                btn.classList.remove('active');
+                btn.innerHTML = '📏<span> วัดระยะ</span>';
+            } else {
+                drawDistanceLines();
+                btn.classList.add('active');
+                btn.innerHTML = '❌<span> ปิดระยะ</span>';
+            }
+            
+            showingDistances = !showingDistances;
+        }
+        
+        // วาดเส้นระยะทาง
+        function drawDistanceLines() {
+            clearDistanceLines();
+            
+            locationsData.forEach(loc => {
+                const nearest = findNearestBorderPoint(loc.lat, loc.lng);
+                
+                // วาดเส้น
+                const line = new google.maps.Polyline({
+                    path: [
+                        { lat: loc.lat, lng: loc.lng },
+                        { lat: nearest.point.lat, lng: nearest.point.lng }
+                    ],
+                    geodesic: true,
+                    strokeColor: '#e74c3c',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    map: map
+                });
+                distanceLines.push(line);
+                
+                // คำนวณจุดกลางสำหรับ label
+                const midLat = (loc.lat + nearest.point.lat) / 2;
+                const midLng = (loc.lng + nearest.point.lng) / 2;
+                
+                // สร้าง label แสดงระยะทาง
+                const labelMarker = new google.maps.Marker({
+                    position: { lat: midLat, lng: midLng },
+                    map: map,
+                    icon: {
+                        url: 'data:image/svg+xml,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>
+                        `),
+                    },
+                    label: {
+                        text: `${nearest.distance.toFixed(1)} km`,
+                        color: '#c0392b',
+                        fontSize: '11px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Prompt, sans-serif'
+                    }
+                });
+                distanceLabels.push(labelMarker);
+            });
+            
+            // วาดเส้นชายแดน (แม่น้ำโขง)
+            const borderLine = new google.maps.Polyline({
+                path: MEKONG_BORDER,
+                geodesic: true,
+                strokeColor: '#3498db',
+                strokeOpacity: 0.6,
+                strokeWeight: 4,
+                map: map
+            });
+            distanceLines.push(borderLine);
+        }
+        
+        // ลบเส้นระยะทาง
+        function clearDistanceLines() {
+            distanceLines.forEach(line => line.setMap(null));
+            distanceLabels.forEach(label => label.setMap(null));
+            distanceLines = [];
+            distanceLabels = [];
+        }
         
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -471,6 +655,10 @@
                 gray: '⏳ รอสำรวจ - ยังไม่มีข้อมูล'
             };
             
+            // คำนวณระยะห่างจากชายแดน
+            const nearest = findNearestBorderPoint(loc.lat, loc.lng);
+            const distanceText = `${nearest.distance.toFixed(1)} km (${nearest.point.name})`;
+            
             return `
                 <div class="info-window">
                     <div class="info-header">
@@ -481,6 +669,10 @@
                         <div class="info-row">
                             <span class="info-label">สถานะ</span>
                             <span class="info-value">${statusText[color]}</span>
+                        </div>
+                        <div class="info-row" style="background:#fff3cd;margin:0 -20px;padding:8px 20px;">
+                            <span class="info-label">📏 ห่างชายแดน</span>
+                            <span class="info-value" style="color:#856404;">${distanceText}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">พื้นที่ ชป.</span>
