@@ -197,11 +197,11 @@
         </div>
         <div class="stat-box">
             <div class="stat-number green" id="surveyedOkCount">0</div>
-            <div class="stat-label">สำรวจแล้ว<br>มีสัญญาณ</div>
+            <div class="stat-label">มีสัญญาณ<br>ใช้มือถือได้</div>
         </div>
         <div class="stat-box">
             <div class="stat-number orange" id="surveyedNoCount">0</div>
-            <div class="stat-label">สำรวจแล้ว<br>ไม่มีสัญญาณ</div>
+            <div class="stat-label">ไม่มีสัญญาณ<br>ใช้ไม่ได้ทุกค่าย</div>
         </div>
         <div class="stat-box">
             <div class="stat-number gray" id="pendingCount">0</div>
@@ -394,9 +394,9 @@
             const gi = v => v === 'ใช้งานได้' ? '✓' : (v === 'ใช้งานไม่ได้' ? '✗' : '-');
             const color = getMarkerColor(loc);
             const statusText = {
-                green: '✅ มีสัญญาณ AIS',
-                orange: '❌ ไม่มีสัญญาณ',
-                gray: '⏳ รอสำรวจ'
+                green: '✅ มีสัญญาณ - ใช้มือถือได้',
+                orange: '❌ ไม่มีสัญญาณ - ใช้ไม่ได้ทุกค่าย',
+                gray: '⏳ รอสำรวจ - ยังไม่มีข้อมูล'
             };
             
             return `
