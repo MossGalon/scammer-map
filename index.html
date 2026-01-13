@@ -174,11 +174,83 @@
         .marker-label.orange { border-color: #f5576c; color: #f5576c; }
         .marker-label.gray { border-color: #95a5a6; color: #95a5a6; }
         
+        .legend h4 small { display: none; }
+        
         @media (max-width: 768px) { 
-            .header-stats { padding: 12px 15px; gap: 15px; width: 90%; } 
-            .stat-number { font-size: 24px; } 
-            .legend { bottom: auto; top: 80px; left: 10px; right: 10px; width: auto; max-width: none; }
-            .edit-btn, .refresh-btn { display: none; } 
+            /* Header Stats เล็กลง */
+            .header-stats { 
+                padding: 8px 10px; 
+                gap: 8px; 
+                width: 95%; 
+                top: 10px;
+                border-radius: 12px;
+            } 
+            .stat-box { padding: 0 8px; }
+            .stat-number { font-size: 18px; } 
+            .stat-label { font-size: 9px; line-height: 1.2; }
+            
+            /* Legend พับได้ */
+            .legend {
+                bottom: 20px;
+                left: 10px;
+                right: 10px;
+                top: auto;
+                width: auto;
+                max-height: 50px;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                min-width: 0;
+                padding: 12px 15px;
+                cursor: pointer;
+            }
+            .legend.active {
+                max-height: 70vh;
+                overflow-y: auto;
+            }
+            .legend.active h4::after {
+                content: ' ▴';
+            }
+            .legend h4 small { display: inline; }
+            .legend h4::after {
+                content: ' ▾';
+            }
+            .legend-section { margin-bottom: 10px; padding-bottom: 10px; }
+            .legend-item { margin: 6px 0; }
+            .legend-marker { width: 26px; height: 26px; font-size: 12px; margin-right: 10px; }
+            .legend-text strong { font-size: 12px; }
+            .legend-text span { font-size: 10px; }
+            .signal-box { padding: 8px; margin-top: 8px; }
+            .signal-row { font-size: 11px; padding: 4px 0; }
+            
+            /* ปุ่มวงกลมด้านล่าง */
+            .edit-btn { 
+                left: 15px; 
+                bottom: 90px; 
+                top: auto;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                padding: 0;
+            }
+            .edit-btn span { display: none; }
+            .refresh-btn { 
+                right: 15px; 
+                bottom: 90px; 
+                top: auto;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                padding: 0;
+            }
+            .refresh-btn span { display: none; }
         }
     </style>
 </head>
@@ -209,12 +281,12 @@
         </div>
     </div>
     
-    <a href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">📝 แก้ไขข้อมูล</a>
+    <a href="https://docs.google.com/spreadsheets/d/1oWbmuEa2Fhn2u03q7X_jFGpXdm1HrtOoHe7WYL8eDfg/edit" target="_blank" class="edit-btn">📝<span> แก้ไขข้อมูล</span></a>
     
-    <button class="refresh-btn" onclick="loadData()">🔄 รีเฟรช</button>
+    <button class="refresh-btn" onclick="loadData()">🔄<span> รีเฟรช</span></button>
     
-    <div class="legend">
-        <h4>📍 คำอธิบายแผนที่</h4>
+    <div class="legend" onclick="this.classList.toggle('active')">
+        <h4>📍 คำอธิบายแผนที่ <small style="font-weight:normal;font-size:11px;opacity:0.6;">(แตะเพื่อดู)</small></h4>
         
         <div class="legend-section">
             <div class="legend-section-title">ความหมายของสี</div>
