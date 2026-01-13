@@ -182,6 +182,36 @@
         .ruler-info.show { display: block; }
         .ruler-info .distance { font-size: 24px; font-weight: 700; color: #667eea; }
         .ruler-info .hint { font-size: 12px; color: #666; margin-top: 5px; }
+        
+        /* ปุ่มซ่อน UI */
+        .hide-ui-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .hide-ui-btn:hover { background: rgba(0,0,0,0.9); }
+        .hide-ui-btn.active { background: #27ae60; }
+        
+        /* เมื่อซ่อน UI */
+        .ui-hidden .header-stats,
+        .ui-hidden .legend,
+        .ui-hidden .distance-btn,
+        .ui-hidden .ruler-btn,
+        .ui-hidden .ruler-info,
+        .ui-hidden .refresh-btn,
+        .ui-hidden .edit-btn { 
+            display: none !important; 
+        }
         .edit-btn { position: absolute; top: 20px; left: 20px; z-index: 1000; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(102,126,234,0.4); font-family: 'Prompt', sans-serif; font-size: 14px; text-decoration: none; transition: all 0.3s; }
         .edit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(102,126,234,0.5); }
         
@@ -352,6 +382,14 @@
                 left: 10px;
                 text-align: center;
             }
+            
+            .hide-ui-btn {
+                top: auto;
+                bottom: 25px;
+                left: 15px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -394,6 +432,8 @@
         <div class="distance" id="rulerDistance">0.00 km</div>
         <div class="hint" id="rulerHint">คลิกจุดแรกบนแผนที่</div>
     </div>
+    
+    <button class="hide-ui-btn" onclick="toggleUI()">👁️ ซ่อน UI</button>
     
     <div class="legend" onclick="this.classList.toggle('active')">
         <h4>📍 คำอธิบายแผนที่ <small style="font-weight:normal;font-size:11px;opacity:0.6;">(แตะเพื่อดู)</small></h4>
@@ -924,6 +964,25 @@ const THAI_BORDER = [
                 rulerLine.setMap(null);
                 rulerLine = null;
             }
+        }
+        
+        // ===== ซ่อน/แสดง UI =====
+        let uiHidden = false;
+        
+        function toggleUI() {
+            const btn = document.querySelector('.hide-ui-btn');
+            
+            if (uiHidden) {
+                document.body.classList.remove('ui-hidden');
+                btn.classList.remove('active');
+                btn.innerHTML = '👁️ ซ่อน UI';
+            } else {
+                document.body.classList.add('ui-hidden');
+                btn.classList.add('active');
+                btn.innerHTML = '👁️ แสดง UI';
+            }
+            
+            uiHidden = !uiHidden;
         }
         
         // วาดเส้นระยะทาง
